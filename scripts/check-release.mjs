@@ -1,9 +1,10 @@
 // Checks that the workspace is in a publishable state for a tagged release.
 // Run with a tag: node scripts/check-release.mjs v1.0.0
+import { fileURLToPath } from 'node:url';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const layers = JSON.parse(readFileSync(join(root, 'scripts/layers.json'), 'utf8'));
 const failures = [];
 

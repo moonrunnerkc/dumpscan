@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import { readFileSync } from 'node:fs';
 
 import { digest, parseJson } from '@dumpscan/canon';
@@ -10,7 +11,7 @@ import { describe, expect, it } from 'vitest';
 import { explainAgainst, explainToJson } from './align.js';
 import { parseExternalReport } from './external.js';
 
-const SCANNERS = new URL('../../../fixtures/scanners', import.meta.url).pathname;
+const SCANNERS = fileURLToPath(new URL('../../../fixtures/scanners', import.meta.url));
 const encoder = new TextEncoder();
 const d = (text: string): Digest => digest(encoder.encode(text));
 

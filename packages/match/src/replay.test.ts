@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import { mkdtempSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -12,8 +13,8 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { matchManifest } from './engine.js';
 import { findingToJson } from './finding.js';
 
-const BUNDLES = new URL('../../../fixtures/bundles', import.meta.url).pathname;
-const RECORDS = new URL('../../../fixtures/osv/synthetic/records', import.meta.url).pathname;
+const BUNDLES = fileURLToPath(new URL('../../../fixtures/bundles', import.meta.url));
+const RECORDS = fileURLToPath(new URL('../../../fixtures/osv/synthetic/records', import.meta.url));
 
 interface Scan {
   readonly lockfile: string;

@@ -1,4 +1,9 @@
+# dumpscan hashes the bytes it reads, so git must never rewrite them on the way
+# into a working tree. Without this, a Windows checkout converts LF to CRLF and
+# every lockfile digest, golden manifest, and feed digest moves.
+
 * text=auto eol=lf
-*.png binary
-*.zip binary
-*.zst binary
+
+# Fixtures are hashed byte for byte. Take git out of the loop entirely rather
+# than trusting its text sniffing.
+fixtures/** -text

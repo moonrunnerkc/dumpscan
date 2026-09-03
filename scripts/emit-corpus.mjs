@@ -2,6 +2,7 @@
 // matrix compare: the snapshot manifest, and the findings of every fixture
 // bundle scanned against it. Every artifact is canonical bytes produced the same
 // way a user's scan would produce them.
+import { fileURLToPath } from 'node:url';
 import {
   mkdirSync,
   mkdtempSync,
@@ -13,7 +14,7 @@ import {
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const outDir = process.argv[2];
 if (outDir === undefined) {
   console.error(

@@ -1,9 +1,10 @@
 // Enforces the downward dependency direction declared in CLAUDE.md.
 // A package may only depend on packages in a strictly lower layer.
+import { fileURLToPath } from 'node:url';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const layers = JSON.parse(readFileSync(join(root, 'scripts/layers.json'), 'utf8'));
 const byPackageName = new Map(Object.keys(layers).map((d) => [`@dumpscan/${d}`, d]));
 byPackageName.set('dumpscan', 'cli');

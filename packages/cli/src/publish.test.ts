@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import { createServer } from 'node:http';
 import type { Server } from 'node:http';
 import { existsSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
@@ -15,8 +16,10 @@ import { packSnapshot, unpackSnapshot } from './snapshot-archive.js';
 import { fetchSnapshot, INDEX_FILE, readStoreIndex } from './snapshot-fetch.js';
 import { resolveSnapshotWithStores } from './snapshot-resolver.js';
 
-const RECORDS = new URL('../../../fixtures/osv/synthetic/records', import.meta.url).pathname;
-const FIXTURE = new URL('../../../fixtures/bundles/synthetic-npm-pypi', import.meta.url).pathname;
+const RECORDS = fileURLToPath(new URL('../../../fixtures/osv/synthetic/records', import.meta.url));
+const FIXTURE = fileURLToPath(
+  new URL('../../../fixtures/bundles/synthetic-npm-pypi', import.meta.url),
+);
 
 let work = '';
 let snapshotDir = '';

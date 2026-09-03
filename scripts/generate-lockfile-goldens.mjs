@@ -1,10 +1,11 @@
 // Writes fixtures/lockfiles/<case>/expected.json from the current parsers.
 // Run with --check to fail when a golden has drifted, which is what the golden
 // test in packages/lockfiles asserts on every run.
+import { fileURLToPath } from 'node:url';
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const cases = join(root, 'fixtures/lockfiles');
 
 const { parseLockfile, parserFor, manifestToJson, inputDigest } = await import(

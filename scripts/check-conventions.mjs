@@ -1,9 +1,10 @@
 // Repository conventions that eslint cannot express: file length cap,
 // kebab-case filenames, and the em dash ban across every tracked text file.
+import { fileURLToPath } from 'node:url';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { basename, join } from 'node:path';
 
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const LINE_CAP = 300;
 const EM_DASH = String.fromCharCode(0x2014);
 const KEBAB = /^[a-z0-9]+(-[a-z0-9]+)*(\.[a-z0-9]+)*$/;

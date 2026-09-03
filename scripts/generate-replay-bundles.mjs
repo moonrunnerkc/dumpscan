@@ -1,11 +1,12 @@
 // Writes fixtures/bundles/<case>/expected.json: the findings, the findings root,
 // and the four digests a predicate would pin. Run with --check to fail when a
 // bundle has drifted, which is what the replay test asserts on every run.
+import { fileURLToPath } from 'node:url';
 import { mkdtempSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const bundles = join(root, 'fixtures/bundles');
 const snapshotRecords = join(root, 'fixtures/osv/synthetic/records');
 

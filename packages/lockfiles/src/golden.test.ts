@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -8,7 +9,7 @@ import { describe, expect, it } from 'vitest';
 import { inputDigest, manifestToJson } from './manifest.js';
 import { parseLockfile, parserFor } from './registry.js';
 
-const CASES_DIR = new URL('../../../fixtures/lockfiles', import.meta.url).pathname;
+const CASES_DIR = fileURLToPath(new URL('../../../fixtures/lockfiles', import.meta.url));
 
 interface Golden {
   readonly lockfile: string;

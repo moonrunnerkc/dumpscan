@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -10,7 +11,7 @@ import { UsageError } from './exit.js';
 import { DEFAULT_CACHE_DIR, resolveSnapshot } from './snapshot-resolver.js';
 import { print } from './output.js';
 
-const RECORDS = new URL('../../../fixtures/osv/synthetic/records', import.meta.url).pathname;
+const RECORDS = fileURLToPath(new URL('../../../fixtures/osv/synthetic/records', import.meta.url));
 
 function scratch(prefix: string): string {
   return mkdtempSync(join(tmpdir(), `dumpscan-${prefix}-`));

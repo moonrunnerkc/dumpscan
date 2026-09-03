@@ -1,10 +1,11 @@
 // Runs the fixture corpus twice under hostile TZ and LANG settings and
 // requires the emitted bytes to be identical.
+import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { readdirSync, readFileSync, rmSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const outRoot = join(root, '.determinism');
 rmSync(outRoot, { recursive: true, force: true });
 

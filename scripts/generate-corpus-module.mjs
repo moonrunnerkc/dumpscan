@@ -1,10 +1,11 @@
 // Embeds fixtures/versions/<ecosystem>/corpus.json into packages/versions so the
 // comparator ruleset digest can be computed without touching the filesystem.
 // Run with --check to fail when the checked-in modules have drifted.
+import { fileURLToPath } from 'node:url';
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const fixtures = join(root, 'fixtures/versions');
 const target = join(root, 'packages/versions/src/corpus');
 

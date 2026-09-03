@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -9,9 +10,11 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { EXIT_FINDINGS, EXIT_OK, EXIT_UNEXPLAINED, EXIT_USAGE } from './exit.js';
 import { run } from './index.js';
 
-const RECORDS = new URL('../../../fixtures/osv/synthetic/records', import.meta.url).pathname;
-const FIXTURE = new URL('../../../fixtures/bundles/synthetic-npm-pypi', import.meta.url).pathname;
-const EXCLUSIONS = new URL('../../../fixtures/exclusions', import.meta.url).pathname;
+const RECORDS = fileURLToPath(new URL('../../../fixtures/osv/synthetic/records', import.meta.url));
+const FIXTURE = fileURLToPath(
+  new URL('../../../fixtures/bundles/synthetic-npm-pypi', import.meta.url),
+);
+const EXCLUSIONS = fileURLToPath(new URL('../../../fixtures/exclusions', import.meta.url));
 
 interface Report {
   readonly digests: Record<string, { moved: boolean }>;

@@ -1,10 +1,11 @@
 // Writes schema/scan-v1.schema.json from the constant in packages/predicate so
 // the published schema and the one the code validates against cannot diverge.
 // Run with --check to fail when they have.
+import { fileURLToPath } from 'node:url';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const { SCAN_STATEMENT_SCHEMA, SNAPSHOT_STATEMENT_SCHEMA } = await import(
   join(root, 'packages/predicate/dist/index.js')
 );

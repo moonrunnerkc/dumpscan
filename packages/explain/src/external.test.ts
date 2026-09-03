@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import { readFileSync } from 'node:fs';
 
 import { parseJson } from '@dumpscan/canon';
@@ -5,7 +6,7 @@ import { describe, expect, it } from 'vitest';
 
 import { isKnownEcosystem, parseExternalReport } from './external.js';
 
-const SCANNERS = new URL('../../../fixtures/scanners', import.meta.url).pathname;
+const SCANNERS = fileURLToPath(new URL('../../../fixtures/scanners', import.meta.url));
 const read = (name: string): ReturnType<typeof parseExternalReport> =>
   parseExternalReport(parseJson(readFileSync(`${SCANNERS}/${name}`, 'utf8')), name);
 

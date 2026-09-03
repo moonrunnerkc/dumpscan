@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import { mkdtempSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -11,8 +12,10 @@ import { EXIT_FINDINGS } from './exit.js';
 import { run } from './index.js';
 import { toSarif } from './sarif.js';
 
-const RECORDS = new URL('../../../fixtures/osv/synthetic/records', import.meta.url).pathname;
-const FIXTURE = new URL('../../../fixtures/bundles/synthetic-npm-pypi', import.meta.url).pathname;
+const RECORDS = fileURLToPath(new URL('../../../fixtures/osv/synthetic/records', import.meta.url));
+const FIXTURE = fileURLToPath(
+  new URL('../../../fixtures/bundles/synthetic-npm-pypi', import.meta.url),
+);
 
 const PREDICATE: ScanPredicate = {
   feedDigest: `sha256:${'a'.repeat(64)}`,
