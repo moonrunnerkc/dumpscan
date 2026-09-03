@@ -1,14 +1,14 @@
 {
   "canon": 0,
   "merkle": 0,
-  "osv": 1,
-  "lockfiles": 1,
-  "versions": 1,
-  "match": 2,
-  "predicate": 2,
-  "sign": 3,
-  "diff": 3,
-  "explain": 3,
-  "cli": 4,
-  "action": 4
+  "osv": 10,
+  "versions": 11,
+  "lockfiles": 12,
+  "predicate": 20,
+  "match": 21,
+  "sign": 30,
+  "explain": 31,
+  "diff": 32,
+  "cli": 40,
+  "action": 41
 }
