@@ -1,0 +1,38 @@
+{
+  "name": "dumpscan",
+  "version": "0.1.0",
+  "description": "The dumpscan command line interface.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.22.2"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "bin": {
+    "dumpscan": "./dist/bin.js"
+  },
+  "dependencies": {
+    "@dumpscan/canon": "workspace:*",
+    "@dumpscan/merkle": "workspace:*",
+    "@dumpscan/osv": "workspace:*",
+    "@dumpscan/lockfiles": "workspace:*",
+    "@dumpscan/versions": "workspace:*",
+    "@dumpscan/match": "workspace:*",
+    "@dumpscan/predicate": "workspace:*",
+    "@dumpscan/sign": "workspace:*",
+    "@dumpscan/diff": "workspace:*",
+    "@dumpscan/explain": "workspace:*"
+  }
+}

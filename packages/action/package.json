@@ -1,0 +1,11 @@
+{
+  "name": "@dumpscan/action",
+  "version": "0.1.0",
+  "description": "The dumpscan composite GitHub Action.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.22.2"
+  },
+  "private": true
+}

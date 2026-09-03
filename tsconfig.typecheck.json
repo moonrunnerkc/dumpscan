@@ -1,0 +1,26 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "composite": false,
+    "incremental": false,
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false,
+    "baseUrl": ".",
+    "paths": {
+      "@dumpscan/canon": ["packages/canon/src/index.ts"],
+      "@dumpscan/merkle": ["packages/merkle/src/index.ts"],
+      "@dumpscan/osv": ["packages/osv/src/index.ts"],
+      "@dumpscan/lockfiles": ["packages/lockfiles/src/index.ts"],
+      "@dumpscan/versions": ["packages/versions/src/index.ts"],
+      "@dumpscan/match": ["packages/match/src/index.ts"],
+      "@dumpscan/predicate": ["packages/predicate/src/index.ts"],
+      "@dumpscan/sign": ["packages/sign/src/index.ts"],
+      "@dumpscan/diff": ["packages/diff/src/index.ts"],
+      "@dumpscan/explain": ["packages/explain/src/index.ts"],
+      "dumpscan": ["packages/cli/src/index.ts"]
+    }
+  },
+  "include": ["packages/*/src/**/*.ts", "scripts/**/*.ts", "vitest.config.ts"]
+}

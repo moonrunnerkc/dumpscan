@@ -1,0 +1,23 @@
+{
+  "name": "@dumpscan/canon",
+  "version": "0.1.0",
+  "description": "RFC 8785 JCS canonicalization, NFC normalization, and sha256 digest formatting.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.22.2"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

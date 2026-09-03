@@ -1,0 +1,41 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "packages/canon"
+    },
+    {
+      "path": "packages/merkle"
+    },
+    {
+      "path": "packages/osv"
+    },
+    {
+      "path": "packages/lockfiles"
+    },
+    {
+      "path": "packages/versions"
+    },
+    {
+      "path": "packages/match"
+    },
+    {
+      "path": "packages/predicate"
+    },
+    {
+      "path": "packages/sign"
+    },
+    {
+      "path": "packages/diff"
+    },
+    {
+      "path": "packages/explain"
+    },
+    {
+      "path": "packages/cli"
+    },
+    {
+      "path": "packages/action"
+    }
+  ]
+}

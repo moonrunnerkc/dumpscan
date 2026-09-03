@@ -1,0 +1,32 @@
+{
+  "name": "@dumpscan/diff",
+  "version": "0.1.0",
+  "description": "Attribution of findings changes to exactly one of the four pinned digests.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.22.2"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "dependencies": {
+    "@dumpscan/canon": "workspace:*",
+    "@dumpscan/merkle": "workspace:*",
+    "@dumpscan/osv": "workspace:*",
+    "@dumpscan/versions": "workspace:*",
+    "@dumpscan/lockfiles": "workspace:*",
+    "@dumpscan/match": "workspace:*",
+    "@dumpscan/predicate": "workspace:*"
+  }
+}

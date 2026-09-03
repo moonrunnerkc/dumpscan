@@ -1,0 +1,35 @@
+{
+  "name": "dumpscan-workspace",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.22.2"
+  },
+  "packageManager": "pnpm@10.34.1",
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "tsc -b --clean && node scripts/clean.mjs",
+    "typecheck": "tsc -p tsconfig.typecheck.json",
+    "lint": "eslint . && node scripts/check-boundaries.mjs && node scripts/check-conventions.mjs && prettier --check .",
+    "format": "prettier --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:determinism": "tsc -b && node scripts/determinism.mjs",
+    "test:mutation": "stryker run"
+  },
+  "devDependencies": {
+    "@stryker-mutator/core": "10.0.0",
+    "@stryker-mutator/vitest-runner": "10.0.0",
+    "@types/node": "22.20.1",
+    "@vitest/coverage-v8": "5.0.0",
+    "eslint": "10.9.1",
+    "eslint-config-prettier": "10.1.8",
+    "globals": "17.12.0",
+    "prettier": "3.9.6",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.69.0",
+    "vitest": "5.0.0"
+  }
+}
