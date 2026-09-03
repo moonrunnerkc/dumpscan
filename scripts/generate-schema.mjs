@@ -5,27 +5,37 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const root = new URL('..', import.meta.url).pathname;
-const { SCAN_STATEMENT_SCHEMA } = await import(join(root, 'packages/predicate/dist/index.js'));
+const { SCAN_STATEMENT_SCHEMA, SNAPSHOT_STATEMENT_SCHEMA } = await import(
+  join(root, 'packages/predicate/dist/index.js')
+);
 
-const target = join(root, 'schema/scan-v1.schema.json');
-const text = `${JSON.stringify(SCAN_STATEMENT_SCHEMA, null, 2)}\n`;
+const schemas = [
+  ['schema/scan-v1.schema.json', SCAN_STATEMENT_SCHEMA],
+  ['schema/snapshot-v1.schema.json', SNAPSHOT_STATEMENT_SCHEMA],
+];
 
 if (process.argv.includes('--check')) {
-  let actual = '';
-  try {
-    actual = readFileSync(target, 'utf8');
-  } catch {
-    actual = '';
+  const stale = [];
+  for (const [name, schema] of schemas) {
+    let actual = '';
+    try {
+      actual = readFileSync(join(root, name), 'utf8');
+    } catch {
+      actual = '';
+    }
+    if (actual !== `${JSON.stringify(schema, null, 2)}\n`) stale.push(name);
   }
-  if (actual !== text) {
+  if (stale.length > 0) {
     console.error(
-      'schema/scan-v1.schema.json is out of date.\nRun pnpm build && pnpm gen:schema. A changed schema is a predicate type change, so bump the predicate type too.',
+      `Out of date: ${stale.join(', ')}\nRun pnpm build && pnpm gen:schema. A changed schema is a predicate type change, so bump the predicate type too.`,
     );
     process.exit(1);
   }
-  console.log('published schema current');
+  console.log(`published schemas current (${schemas.length})`);
 } else {
   mkdirSync(join(root, 'schema'), { recursive: true });
-  writeFileSync(target, text);
-  console.log(`wrote ${target.slice(root.length)}`);
+  for (const [name, schema] of schemas) {
+    writeFileSync(join(root, name), `${JSON.stringify(schema, null, 2)}\n`);
+  }
+  console.log(`wrote ${schemas.length} schemas`);
 }

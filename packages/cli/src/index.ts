@@ -7,6 +7,7 @@ import type { CommandOutput } from './output.js';
 import { runDiff } from './diff-command.js';
 import { runExplain } from './explain-command.js';
 import { runProve } from './prove-command.js';
+import { runPublish } from './publish-command.js';
 import { runReplay } from './replay-command.js';
 import { runScan } from './scan-command.js';
 import { runSnapshot } from './snapshot-command.js';
@@ -71,13 +72,15 @@ async function dispatch(command: string, args: ParsedArgs): Promise<CommandOutpu
     case 'verify':
       return runVerify(args);
     case 'prove':
-      return Promise.resolve(runProve(args));
+      return runProve(args);
     case 'replay':
-      return Promise.resolve(runReplay(args));
+      return runReplay(args);
     case 'diff':
-      return Promise.resolve(runDiff(args));
+      return runDiff(args);
     case 'explain':
       return Promise.resolve(runExplain(args));
+    case 'publish':
+      return runPublish(args);
     default:
       throw new UsageError(
         `dumpscan: ${JSON.stringify(command)} is not a dumpscan command; run dumpscan --help`,
@@ -94,5 +97,12 @@ export { EXIT_FINDINGS, EXIT_UNEXPLAINED } from './exit.js';
 export { parseArgs } from './args.js';
 export type { ParsedArgs } from './args.js';
 export { readBundle, parseBundle } from './bundle-io.js';
-export { resolveSnapshot, DEFAULT_CACHE_DIR } from './snapshot-resolver.js';
+export {
+  DEFAULT_CACHE_DIR,
+  resolveSnapshot,
+  resolveSnapshotWithStores,
+  storesFrom,
+} from './snapshot-resolver.js';
+export { fetchSnapshot, INDEX_FILE, readStoreIndex } from './snapshot-fetch.js';
+export { packSnapshot, unpackSnapshot } from './snapshot-archive.js';
 export { HELP } from './help.js';

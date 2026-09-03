@@ -78,6 +78,9 @@ importers:
       '@dumpscan/versions':
         specifier: workspace:*
         version: link:../versions
+      fflate:
+        specifier: 0.8.3
+        version: 0.8.3
 
   packages/diff:
     dependencies:

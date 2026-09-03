@@ -125,6 +125,26 @@ export function verifyBundleOffline(bundle: ScanBundle): VerifyResult {
  * @returns The binding check.
  */
 export function bindingCheck(bundle: ScanBundle, payload: Uint8Array, payloadType: string): Check {
+  return payloadBinding(canonicalBytes(statementToJson(bundle.statement)), payload, payloadType);
+}
+
+/**
+ * Checks that a signature covers a specific set of canonical bytes.
+ *
+ * The scan statement and the snapshot statement are different documents with
+ * different renderers, so the caller says which bytes the signature has to cover
+ * rather than this deciding for it.
+ *
+ * @param expectedBytes - The canonical bytes the signature must cover.
+ * @param payload - The signed payload bytes.
+ * @param payloadType - The DSSE payload type.
+ * @returns The binding check.
+ */
+export function payloadBinding(
+  expectedBytes: Uint8Array,
+  payload: Uint8Array,
+  payloadType: string,
+): Check {
   if (payloadType !== INTOTO_PAYLOAD_TYPE) {
     return {
       name: 'payload-binding',
@@ -133,7 +153,7 @@ export function bindingCheck(bundle: ScanBundle, payload: Uint8Array, payloadTyp
     };
   }
 
-  const expected = digest(canonicalBytes(statementToJson(bundle.statement)));
+  const expected = digest(expectedBytes);
   let actual: Digest;
   try {
     actual = digest(canonicalBytes(parseJson(new TextDecoder().decode(payload))));

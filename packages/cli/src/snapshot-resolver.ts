@@ -7,6 +7,7 @@ import { MANIFEST_FILE, parseManifest } from '@dumpscan/osv';
 import { readFileSync } from 'node:fs';
 
 import { UsageError } from './exit.js';
+import { fetchSnapshot } from './snapshot-fetch.js';
 
 /** Where snapshots resolved by digest are cached. */
 export const DEFAULT_CACHE_DIR = join(homedir(), '.cache', 'dumpscan', 'snapshots');
@@ -42,8 +43,73 @@ export function resolveSnapshot(reference: string, cacheDir?: string): string {
   }
 
   throw new UsageError(
-    `dumpscan: no snapshot with feed digest ${reference} in ${cache}; fetch it with dumpscan snapshot --from <store>, or pass the path of a snapshot directory`,
+    `dumpscan: no snapshot with feed digest ${reference} in ${cache}; pass --store <url> to fetch it, or pass the path of a snapshot directory`,
   );
+}
+
+export interface ResolveOptions {
+  readonly cacheDir?: string;
+  /** Ordered store base URLs to try when the cache misses. */
+  readonly stores?: readonly string[];
+  readonly issuer?: string;
+  readonly identity?: string;
+  readonly insecure?: boolean;
+  readonly fetchImpl?: typeof fetch;
+}
+
+/**
+ * Resolves a snapshot, falling back to the configured stores when the cache does
+ * not have it.
+ *
+ * The local cache is tried first because a snapshot is immutable: if the digest
+ * is already on disk, no store can have a better copy of it.
+ *
+ * @param reference - A path or a `sha256:` feed digest.
+ * @param options - Cache directory, stores, and verification expectations.
+ * @returns The snapshot directory.
+ * @throws UsageError when neither the cache nor any store has it.
+ */
+export async function resolveSnapshotWithStores(
+  reference: string,
+  options: ResolveOptions = {},
+): Promise<string> {
+  try {
+    return resolveSnapshot(reference, options.cacheDir);
+  } catch (error) {
+    const stores = options.stores ?? [];
+    if (!isDigest(reference) || stores.length === 0) throw error;
+    const result = await fetchSnapshot(reference, {
+      stores,
+      cacheDir:
+        options.cacheDir === undefined || options.cacheDir === ''
+          ? DEFAULT_CACHE_DIR
+          : options.cacheDir,
+      ...(options.issuer === undefined ? {} : { issuer: options.issuer }),
+      ...(options.identity === undefined ? {} : { identity: options.identity }),
+      ...(options.insecure === undefined ? {} : { insecure: options.insecure }),
+      ...(options.fetchImpl === undefined ? {} : { fetchImpl: options.fetchImpl }),
+    });
+    return result.directory;
+  }
+}
+
+/**
+ * Reads the configured stores from the command line and the environment.
+ *
+ * `--store` may repeat, and `DUMPSCAN_STORES` holds a comma separated list, so a
+ * CI job can configure a mirror once for every dumpscan invocation in it.
+ *
+ * @param repeated - Values of the repeated `--store` option.
+ * @param environment - The process environment.
+ * @returns The store base URLs, in the order they should be tried.
+ */
+export function storesFrom(
+  repeated: readonly string[] | undefined,
+  environment: Record<string, string | undefined>,
+): string[] {
+  const fromFlags = (repeated ?? []).flatMap((value) => value.split(','));
+  const fromEnv = (environment['DUMPSCAN_STORES'] ?? '').split(',');
+  return [...fromFlags, ...fromEnv].map((value) => value.trim()).filter((value) => value !== '');
 }
 
 function candidates(cache: string): string[] {

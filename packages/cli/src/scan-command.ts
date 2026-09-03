@@ -24,7 +24,7 @@ import { flag, requireOption } from './args.js';
 import type { ParsedArgs } from './args.js';
 import { EXIT_FINDINGS, EXIT_OK, UsageError } from './exit.js';
 import type { CommandOutput } from './output.js';
-import { resolveSnapshot } from './snapshot-resolver.js';
+import { resolveSnapshotWithStores, storesFrom } from './snapshot-resolver.js';
 
 /**
  * Runs `dumpscan scan`.
@@ -54,7 +54,9 @@ export async function runScan(args: ParsedArgs): Promise<CommandOutput> {
     'snapshot',
     'dumpscan never picks a snapshot for you, because two runs of the same command have to make the same claim; pass the feed digest or the path of the snapshot to scan against',
   );
-  const snapshot = openSnapshot(resolveSnapshot(snapshotRef, args.options.get('cache')));
+  const snapshot = openSnapshot(
+    await resolveSnapshotWithStores(snapshotRef, resolveOptionsFrom(args)),
+  );
 
   const parsed = parseLockfile(
     lockfilePath,
@@ -134,6 +136,32 @@ export async function runScan(args: ParsedArgs): Promise<CommandOutput> {
       bundle: out,
       findings: result.findings.map(findingToJson),
     },
+  };
+}
+
+/**
+ * Reads the cache, the stores, and the identity expectations a snapshot fetch
+ * needs, so every command spells them the same way.
+ *
+ * @param args - Parsed arguments.
+ * @returns Options for resolveSnapshotWithStores.
+ */
+export function resolveOptionsFrom(args: ParsedArgs): {
+  cacheDir?: string;
+  stores: string[];
+  issuer?: string;
+  identity?: string;
+  insecure?: boolean;
+} {
+  const cache = args.options.get('cache');
+  const issuer = args.options.get('snapshot-issuer');
+  const identity = args.options.get('snapshot-identity');
+  return {
+    ...(cache === undefined || cache === '' ? {} : { cacheDir: cache }),
+    stores: storesFrom(args.repeated.get('store'), process.env),
+    ...(issuer === undefined || issuer === '' ? {} : { issuer }),
+    ...(identity === undefined || identity === '' ? {} : { identity }),
+    ...(flag(args, 'insecure') ? { insecure: true } : {}),
   };
 }
 

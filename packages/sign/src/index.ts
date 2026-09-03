@@ -13,12 +13,13 @@ export {
   verifyPlainKey,
 } from './dsse.js';
 export type { DsseEnvelope, DsseSignature, PlainKeyPair } from './dsse.js';
-export { signKeyless, verifyKeyless } from './keyless.js';
+export { signKeyless, verifyKeyless, verifySigstoreBundle } from './keyless.js';
 export type { KeylessSignOptions, KeylessVerifyOptions } from './keyless.js';
 export { proveAdvisory, proveFinding, verifyProof } from './prove.js';
 export type { FindingProof, InclusionProof } from './prove.js';
 export {
   bindingCheck,
+  payloadBinding,
   describeChecks,
   recomputeFindingsRoot,
   renderContents,

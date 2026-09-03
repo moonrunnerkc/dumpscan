@@ -1,0 +1,111 @@
+name: snapshot
+
+on:
+  schedule:
+    # Daily, a little after OSV's own export window.
+    - cron: '17 5 * * *'
+  workflow_dispatch:
+    inputs:
+      ecosystems:
+        description: Ecosystems to include, comma separated
+        required: false
+        default: 'Go,Maven,PyPI,crates.io,npm'
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: build, sign, and publish a feed snapshot
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.34.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm build
+
+      - name: Record the date this snapshot is indexed under
+        id: today
+        run: echo "date=$(date -u +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
+
+      - name: Download OSV and build the snapshot
+        run: >-
+          node packages/cli/dist/bin.js snapshot
+          --ecosystems "${{ inputs.ecosystems || 'Go,Maven,PyPI,crates.io,npm' }}"
+          --out snapshot --json | tee snapshot.json
+
+      - name: Pack, sign, and index it
+        id: publish
+        run: |
+          gh release download snapshots --pattern index.json --dir release --clobber || mkdir -p release
+          node packages/cli/dist/bin.js publish snapshot \
+            --out release --date "${{ steps.today.outputs.date }}" --sign --json | tee publish.json
+          {
+            echo "feed-digest=$(node -e 'process.stdout.write(JSON.parse(require("node:fs").readFileSync("publish.json","utf8")).feedDigest)')"
+            echo "archive=$(node -e 'process.stdout.write(JSON.parse(require("node:fs").readFileSync("publish.json","utf8")).archive)')"
+          } >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Check the published bytes fetch and verify from a clean cache
+        run: |
+          node -e '
+            const { createServer } = require("node:http");
+            const { readFileSync, existsSync } = require("node:fs");
+            const { join } = require("node:path");
+            const server = createServer((req, res) => {
+              const name = (req.url || "/").replace(/^\//, "");
+              const path = join("release", name);
+              if (!name || name.includes("..") || !existsSync(path)) return res.writeHead(404).end();
+              res.writeHead(200).end(readFileSync(path));
+            });
+            server.listen(8737, "127.0.0.1", () => console.log("serving release/ on 8737"));
+          ' &
+          sleep 2
+          node packages/cli/dist/bin.js scan fixtures/bundles/synthetic-npm-pypi/package-lock.json \
+            --snapshot "${{ steps.publish.outputs.feed-digest }}" \
+            --store http://127.0.0.1:8737 \
+            --cache "$RUNNER_TEMP/clean-cache" \
+            --snapshot-issuer https://token.actions.githubusercontent.com \
+            --snapshot-identity "https://github.com/${{ github.repository }}/.github/workflows/snapshot.yml@refs/heads/main" \
+            --out published.bundle.json || test $? -eq 1
+
+      - name: Publish to the snapshots release
+        run: |
+          gh release view snapshots >/dev/null 2>&1 || \
+            gh release create snapshots --title "dumpscan feed snapshots" --notes \
+              "Content addressed OSV feed snapshots. Each asset is named after its feed digest. index.json maps a date to the digest published that day."
+          gh release upload snapshots \
+            "release/${{ steps.publish.outputs.archive }}" \
+            "release/$(basename "${{ steps.publish.outputs.archive }}" .tar.gz).att.json" \
+            release/index.json --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Summarize
+        run: |
+          {
+            echo "### dumpscan snapshot ${{ steps.today.outputs.date }}"
+            echo
+            echo "feed digest: \`${{ steps.publish.outputs.feed-digest }}\`"
+            echo
+            echo 'Scan against it with:'
+            echo
+            echo '```'
+            echo "dumpscan scan <lockfile> --snapshot ${{ steps.publish.outputs.feed-digest }} \\"
+            echo "  --store https://github.com/${{ github.repository }}/releases/download/snapshots"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

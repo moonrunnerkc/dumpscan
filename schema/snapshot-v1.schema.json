@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dumpscan.dev/schema/snapshot-v1.schema.json",
+  "title": "dumpscan snapshot statement",
+  "description": "An in-toto Statement v1 binding a feed snapshot to where its records came from.",
+  "type": "object",
+  "required": [
+    "_type",
+    "subject",
+    "predicateType",
+    "predicate"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "_type": {
+      "const": "https://in-toto.io/Statement/v1"
+    },
+    "predicateType": {
+      "const": "https://dumpscan.dev/snapshot/v1"
+    },
+    "subject": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "digest"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^\\S(?:.*\\S)?$"
+          },
+          "digest": {
+            "type": "object",
+            "required": [
+              "sha256"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            }
+          }
+        }
+      }
+    },
+    "predicate": {
+      "type": "object",
+      "required": [
+        "feedDigest",
+        "recordCount",
+        "sources"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "feedDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "recordCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "ecosystem",
+              "url",
+              "etag",
+              "lastModified",
+              "recordCount"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "ecosystem": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              },
+              "etag": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "lastModified": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "recordCount": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -16,7 +16,8 @@ import type { ParsedArgs } from './args.js';
 import { readBundle } from './bundle-io.js';
 import { EXIT_FINDINGS, EXIT_OK, UsageError } from './exit.js';
 import type { CommandOutput } from './output.js';
-import { resolveSnapshot } from './snapshot-resolver.js';
+import { resolveOptionsFrom } from './scan-command.js';
+import { resolveSnapshotWithStores } from './snapshot-resolver.js';
 
 interface Mismatch {
   readonly field: string;
@@ -42,7 +43,7 @@ interface Mismatch {
  * @throws UsageError when the bundle path is missing or the snapshot cannot be
  * resolved.
  */
-export function runReplay(args: ParsedArgs): CommandOutput {
+export async function runReplay(args: ParsedArgs): Promise<CommandOutput> {
   const bundlePath = args.positional[0];
   if (bundlePath === undefined) {
     throw new UsageError(
@@ -77,7 +78,10 @@ export function runReplay(args: ParsedArgs): CommandOutput {
   }
 
   const snapshot = openSnapshot(
-    resolveSnapshot(args.options.get('snapshot') ?? recorded.feedDigest, args.options.get('cache')),
+    await resolveSnapshotWithStores(
+      args.options.get('snapshot') ?? recorded.feedDigest,
+      resolveOptionsFrom(args),
+    ),
   );
   if (snapshot.feedDigest !== recorded.feedDigest) {
     mismatches.push({

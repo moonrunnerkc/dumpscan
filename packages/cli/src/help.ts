@@ -11,6 +11,7 @@ commands:
   diff       Attribute every changed finding to exactly one pinned input
   prove      Emit a Merkle inclusion proof for a finding and its advisory
   explain    Bucket every disagreement with Grype or Trivy
+  publish    Pack, sign, and index a snapshot for a store
 
 dumpscan snapshot [--ecosystems <list>] [--from <dir>] [--out <dir>] [--base-url <url>]
   Downloads the OSV archives and builds a content addressed snapshot, or builds
@@ -68,6 +69,21 @@ dumpscan explain <bundle> <grype-or-trivy-json>
   tool, not about the code.
 
     dumpscan explain dumpscan.bundle.json grype.json
+
+dumpscan publish <snapshot-dir> --out <dir> --date <YYYY-MM-DD> [--sign]
+  Packs the snapshot into a deterministic archive named after its feed digest,
+  signs its manifest as an attestation of its own, and updates the date to
+  digest index. Publishing the bytes is the workflow's job.
+
+    dumpscan publish ./snapshot --out ./release --date 2026-09-03 --sign
+
+snapshot store options, accepted by scan, replay, prove, and diff:
+  --store <url>              Base URL of a snapshot store. May repeat.
+                             DUMPSCAN_STORES holds a comma separated list.
+  --cache <dir>              Where fetched snapshots are cached.
+  --snapshot-issuer <url>    Expected issuer of a snapshot attestation.
+  --snapshot-identity <id>   Expected identity of a snapshot attestation.
+  --insecure                 Skip snapshot attestation verification. Opt in only.
 
 global options:
   --json     Machine readable output

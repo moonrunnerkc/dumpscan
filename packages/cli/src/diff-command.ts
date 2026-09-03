@@ -1,5 +1,6 @@
 import { existsSync } from 'node:fs';
 
+import { isDigest } from '@dumpscan/canon';
 import type { Digest } from '@dumpscan/canon';
 import { diffScans } from '@dumpscan/diff';
 import type { DiffInput, FindingChange } from '@dumpscan/diff';
@@ -11,7 +12,8 @@ import type { ParsedArgs } from './args.js';
 import { readBundle } from './bundle-io.js';
 import { EXIT_FINDINGS, EXIT_OK, EXIT_UNEXPLAINED, UsageError } from './exit.js';
 import type { CommandOutput } from './output.js';
-import { resolveSnapshot } from './snapshot-resolver.js';
+import { resolveOptionsFrom } from './scan-command.js';
+import { resolveSnapshotWithStores } from './snapshot-resolver.js';
 
 /**
  * Runs `dumpscan diff`.
@@ -30,7 +32,7 @@ import { resolveSnapshot } from './snapshot-resolver.js';
  * @returns Exit code, human lines, and the attribution report.
  * @throws UsageError when either bundle path is missing.
  */
-export function runDiff(args: ParsedArgs): CommandOutput {
+export async function runDiff(args: ParsedArgs): Promise<CommandOutput> {
   const pathA = args.positional[0];
   const pathB = args.positional[1];
   if (pathA === undefined || pathB === undefined) {
@@ -42,8 +44,8 @@ export function runDiff(args: ParsedArgs): CommandOutput {
   const bundleA = readBundle(pathA);
   const bundleB = readBundle(pathB);
   const result = diffScans(
-    scanOf(bundleA, args.options.get('snapshot-a'), args.options.get('cache')),
-    scanOf(bundleB, args.options.get('snapshot-b'), args.options.get('cache')),
+    await scanOf(bundleA, args, args.options.get('snapshot-a')),
+    await scanOf(bundleB, args, args.options.get('snapshot-b')),
   );
 
   const lines: string[] = [];
@@ -84,8 +86,12 @@ function describe(change: FindingChange): string {
   return `  ${change.kind.padEnd(8)}${change.cause.padEnd(12)}${change.key}`;
 }
 
-function scanOf(bundle: ScanBundle, snapshotRef: string | undefined, cache?: string): DiffInput {
-  const advisories = loadAdvisories(bundle, snapshotRef, cache);
+async function scanOf(
+  bundle: ScanBundle,
+  args: ParsedArgs,
+  snapshotRef: string | undefined,
+): Promise<DiffInput> {
+  const advisories = await loadAdvisories(bundle, args, snapshotRef);
   return {
     predicate: bundle.statement.predicate,
     manifest: bundle.manifest,
@@ -94,17 +100,19 @@ function scanOf(bundle: ScanBundle, snapshotRef: string | undefined, cache?: str
   };
 }
 
-function loadAdvisories(
+async function loadAdvisories(
   bundle: ScanBundle,
+  args: ParsedArgs,
   snapshotRef: string | undefined,
-  cache?: string,
-): Map<Digest, OsvAdvisory> | undefined {
+): Promise<Map<Digest, OsvAdvisory> | undefined> {
   if (snapshotRef === undefined || snapshotRef === '') return undefined;
-  if (!existsSync(snapshotRef)) {
+  if (!isDigest(snapshotRef) && !existsSync(snapshotRef)) {
     throw new UsageError(`dumpscan diff: ${snapshotRef} does not exist`);
   }
 
-  const snapshot = openSnapshot(resolveSnapshot(snapshotRef, cache));
+  const snapshot = openSnapshot(
+    await resolveSnapshotWithStores(snapshotRef, resolveOptionsFrom(args)),
+  );
   const byDigest = new Map<Digest, OsvAdvisory>();
   for (const finding of bundle.findings) {
     if (byDigest.has(finding.advisoryDigest)) continue;

@@ -8,7 +8,8 @@ import type { ParsedArgs } from './args.js';
 import { readBundle } from './bundle-io.js';
 import { EXIT_FINDINGS, EXIT_OK, UsageError } from './exit.js';
 import type { CommandOutput } from './output.js';
-import { resolveSnapshot } from './snapshot-resolver.js';
+import { resolveOptionsFrom } from './scan-command.js';
+import { resolveSnapshotWithStores } from './snapshot-resolver.js';
 
 /**
  * Runs `dumpscan prove`.
@@ -23,7 +24,7 @@ import { resolveSnapshot } from './snapshot-resolver.js';
  * @returns Exit code, human lines, and the proofs.
  * @throws UsageError when the bundle or the advisory id is missing.
  */
-export function runProve(args: ParsedArgs): CommandOutput {
+export async function runProve(args: ParsedArgs): Promise<CommandOutput> {
   const bundlePath = args.positional[0];
   const advisoryId = args.positional[1];
   if (bundlePath === undefined || advisoryId === undefined) {
@@ -44,7 +45,7 @@ export function runProve(args: ParsedArgs): CommandOutput {
       `path      ${String(finding.proof.path.length)} hashes, ${valid ? 'verified' : 'DOES NOT VERIFY'}`,
       `package   ${finding.finding.purl} (${finding.finding.status})`,
     );
-    feed = proveInFeed(
+    feed = await proveInFeed(
       args,
       finding.finding.ecosystem,
       finding.finding.name,
@@ -65,20 +66,22 @@ export function runProve(args: ParsedArgs): CommandOutput {
   };
 }
 
-function proveInFeed(
+async function proveInFeed(
   args: ParsedArgs,
   ecosystem: Ecosystem,
   name: string,
   advisoryDigest: Digest,
   lines: string[],
-): unknown {
+): Promise<unknown> {
   const reference = args.options.get('snapshot');
   if (reference === undefined || reference === '') {
     lines.push('feed      no --snapshot given, so the advisory was not proved against the feed');
     return null;
   }
 
-  const snapshot = openSnapshot(resolveSnapshot(reference, args.options.get('cache')));
+  const snapshot = openSnapshot(
+    await resolveSnapshotWithStores(reference, resolveOptionsFrom(args)),
+  );
   const digests = snapshot.digestsFor(ecosystem, normalizePackageName(ecosystem, name));
   const all = snapshot.manifest.ecosystems.find((entry) => entry.ecosystem === ecosystem);
   if (all === undefined || digests.length === 0) {

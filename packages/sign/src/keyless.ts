@@ -2,9 +2,12 @@ import { isJsonObject, parseJson } from '@dumpscan/canon';
 import type { JsonObject } from '@dumpscan/canon';
 import * as sigstore from 'sigstore';
 
+import { canonicalBytes } from '@dumpscan/canon';
+import { statementToJson } from '@dumpscan/predicate';
+
 import type { Attestation, ScanBundle } from './bundle.js';
 import { INTOTO_PAYLOAD_TYPE } from './dsse.js';
-import { bindingCheck } from './verify.js';
+import { payloadBinding } from './verify.js';
 import type { Check } from './verify.js';
 
 export interface KeylessSignOptions {
@@ -86,10 +89,32 @@ export async function verifyKeyless(
       },
     ];
   }
+  return verifySigstoreBundle(
+    bundle.attestation.bundle,
+    canonicalBytes(statementToJson(bundle.statement)),
+    options,
+  );
+}
 
+/**
+ * Verifies a Sigstore bundle and that it covers a specific set of bytes.
+ *
+ * Used for the scan attestation and for the snapshot attestation, which are
+ * different statement types signed the same way.
+ *
+ * @param sigstoreBundle - The Sigstore bundle.
+ * @param expectedBytes - The canonical bytes the signature has to cover.
+ * @param options - Identity, issuer, and TUF cache settings.
+ * @returns The signature, payload binding, and identity checks.
+ */
+export async function verifySigstoreBundle(
+  sigstoreBundle: JsonObject,
+  expectedBytes: Uint8Array,
+  options: KeylessVerifyOptions = {},
+): Promise<Check[]> {
   const checks: Check[] = [];
   try {
-    await sigstore.verify(bundle.attestation.bundle as never, {
+    await sigstore.verify(sigstoreBundle as never, {
       ...(options.issuer === undefined ? {} : { certificateIssuer: options.issuer }),
       ...(options.identity === undefined ? {} : identityOption(options.identity)),
       ...(options.tufCachePath === undefined ? {} : { tufCachePath: options.tufCachePath }),
@@ -109,7 +134,7 @@ export async function verifyKeyless(
     return checks;
   }
 
-  checks.push(bindingCheck(bundle, signedPayload(bundle.attestation.bundle), INTOTO_PAYLOAD_TYPE));
+  checks.push(payloadBinding(expectedBytes, signedPayload(sigstoreBundle), INTOTO_PAYLOAD_TYPE));
   checks.push({
     name: 'identity',
     passed: options.issuer !== undefined && options.identity !== undefined,

@@ -33,6 +33,7 @@
     "@dumpscan/osv": "workspace:*",
     "@dumpscan/predicate": "workspace:*",
     "@dumpscan/sign": "workspace:*",
-    "@dumpscan/versions": "workspace:*"
+    "@dumpscan/versions": "workspace:*",
+    "fflate": "0.8.3"
   }
 }
