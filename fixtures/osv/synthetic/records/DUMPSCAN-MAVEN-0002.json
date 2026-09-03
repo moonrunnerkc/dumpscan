@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.6.0",
+  "id": "DUMPSCAN-MAVEN-0002",
+  "modified": "2025-08-09T00:00:00Z",
+  "summary": "Path traversal in the sample helper",
+  "affected": [
+    {
+      "package": {
+        "ecosystem": "Maven",
+        "name": "org.example.other:helper"
+      },
+      "ranges": [
+        {
+          "type": "ECOSYSTEM",
+          "events": [
+            {
+              "introduced": "1.0"
+            },
+            {
+              "last_affected": "1.4.7"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

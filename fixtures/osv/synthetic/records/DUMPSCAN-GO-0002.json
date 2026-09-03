@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.6.0",
+  "id": "DUMPSCAN-GO-0002",
+  "modified": "2025-07-20T00:00:00Z",
+  "aliases": [
+    "GO-2025-0002"
+  ],
+  "summary": "Denial of service in the text module",
+  "affected": [
+    {
+      "package": {
+        "ecosystem": "Go",
+        "name": "example.invalid/x/text"
+      },
+      "ranges": [
+        {
+          "type": "SEMVER",
+          "events": [
+            {
+              "introduced": "0"
+            },
+            {
+              "fixed": "v0.15.0"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

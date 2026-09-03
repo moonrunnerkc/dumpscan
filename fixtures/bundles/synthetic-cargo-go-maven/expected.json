@@ -1,0 +1,229 @@
+{
+  "note": "Committed scan of the lockfiles beside this file against fixtures/osv/synthetic. A change to findingsRoot means matching semantics moved.",
+  "feedDigest": "sha256:8fb337fd94e1173eaf00e4b6d472169364319e1fec474e701eb66483471dc8d2",
+  "snapshotManifestDigest": "sha256:33b98efeeb9e6221df22d99ee8b0d6d2fdf51c7482a6ccd54701c159af67053e",
+  "comparatorRulesetDigest": "sha256:c3baa72998b01ca1bc7d646b902055d83298b0e14b04696ed403ec3415a06e1d",
+  "exclusionsDigest": null,
+  "scans": [
+    {
+      "lockfile": "Cargo.lock",
+      "workspaceRoot": ".",
+      "inputDigest": "sha256:3d631c83a2ea20b1d6c5ddee883b91432b6a726c2736dbea442945806bf4ef18",
+      "matcherVersion": "0.1.0",
+      "findingsRoot": "sha256:5995b83127c39fb90a823c9c53905b71c3d3b496749698773e35317f26397e51",
+      "findingsCount": 2,
+      "ecosystems": [
+        "crates.io"
+      ],
+      "manifest": {
+        "manifestVersion": "dumpscan.input/v1",
+        "format": "Cargo.lock v4",
+        "lockfileDigest": "sha256:7800cd4d2435abaacf007a70234671e984228ece5e2b184a77d3bf89220eb0ad",
+        "workspaceRoot": ".",
+        "overApproximated": false,
+        "packages": [
+          {
+            "ecosystem": "crates.io",
+            "name": "sample_crate",
+            "version": "0.3.35",
+            "purl": "pkg:cargo/sample_crate@0.3.35"
+          },
+          {
+            "ecosystem": "crates.io",
+            "name": "tiny-helper",
+            "version": "0.4.2",
+            "purl": "pkg:cargo/tiny-helper@0.4.2"
+          },
+          {
+            "ecosystem": "crates.io",
+            "name": "unaffected",
+            "version": "9.9.9",
+            "purl": "pkg:cargo/unaffected@9.9.9"
+          }
+        ],
+        "unresolved": []
+      },
+      "findings": [
+        {
+          "ecosystem": "crates.io",
+          "name": "sample_crate",
+          "version": "0.3.35",
+          "purl": "pkg:cargo/sample_crate@0.3.35",
+          "advisoryId": "DUMPSCAN-CRATES-0001",
+          "advisoryModified": "2025-06-01T08:15:00Z",
+          "advisoryDigest": "sha256:dcd1e19768b5ac5e5605e298cb441df09762061a220831e2617b494edd2fc4af",
+          "matchedRange": {
+            "type": "SEMVER",
+            "introduced": "0.1.0",
+            "fixed": "0.3.36",
+            "lastAffected": null,
+            "limit": null
+          },
+          "aliases": [
+            "RUSTSEC-2025-0001"
+          ],
+          "severity": [],
+          "status": "affected",
+          "reason": null
+        },
+        {
+          "ecosystem": "crates.io",
+          "name": "tiny-helper",
+          "version": "0.4.2",
+          "purl": "pkg:cargo/tiny-helper@0.4.2",
+          "advisoryId": "DUMPSCAN-CRATES-0002",
+          "advisoryModified": "2025-06-02T00:00:00Z",
+          "advisoryDigest": "sha256:ec294c378071f69d09559700e28e1982f547e0fce2e5485fd082960b4c4c85c2",
+          "matchedRange": {
+            "type": "SEMVER",
+            "introduced": "0",
+            "fixed": "0.5.0",
+            "lastAffected": null,
+            "limit": null
+          },
+          "aliases": [
+            "RUSTSEC-2025-0002"
+          ],
+          "severity": [],
+          "status": "affected",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "lockfile": "go.sum",
+      "workspaceRoot": ".",
+      "inputDigest": "sha256:a98549b2e96faf8dae896aca3f7cbbb263998edfee1f3d5ba209ad4447dca5a5",
+      "matcherVersion": "0.1.0",
+      "findingsRoot": "sha256:30250f962ebbbc6a9118f8a8c0cf08102315b5cc8e7066601ead6647c5832dfe",
+      "findingsCount": 2,
+      "ecosystems": [
+        "Go"
+      ],
+      "manifest": {
+        "manifestVersion": "dumpscan.input/v1",
+        "format": "go.sum with go.mod",
+        "lockfileDigest": "sha256:66943e73f25573aa2674443ac3295dd1e8ab3a94506b5c79819d78d41fd1d742",
+        "workspaceRoot": ".",
+        "overApproximated": true,
+        "packages": [
+          {
+            "ecosystem": "Go",
+            "name": "example.invalid/x/net",
+            "version": "v0.22.0",
+            "purl": "pkg:golang/example.invalid/x/net@v0.22.0"
+          },
+          {
+            "ecosystem": "Go",
+            "name": "example.invalid/x/text",
+            "version": "v0.14.0",
+            "purl": "pkg:golang/example.invalid/x/text@v0.14.0"
+          }
+        ],
+        "unresolved": []
+      },
+      "findings": [
+        {
+          "ecosystem": "Go",
+          "name": "example.invalid/x/net",
+          "version": "v0.22.0",
+          "purl": "pkg:golang/example.invalid/x/net@v0.22.0",
+          "advisoryId": "DUMPSCAN-GO-0001",
+          "advisoryModified": "2025-07-19T13:00:00Z",
+          "advisoryDigest": "sha256:57f73f7255cf5dae06ae5e5ed797eeaa32f95426d9e6b62ea43ca849fb14e0bf",
+          "matchedRange": {
+            "type": "SEMVER",
+            "introduced": "0",
+            "fixed": "0.23.0",
+            "lastAffected": null,
+            "limit": null
+          },
+          "aliases": [
+            "GO-2025-0001",
+            "CVE-2025-90004"
+          ],
+          "severity": [],
+          "status": "affected",
+          "reason": null
+        },
+        {
+          "ecosystem": "Go",
+          "name": "example.invalid/x/text",
+          "version": "v0.14.0",
+          "purl": "pkg:golang/example.invalid/x/text@v0.14.0",
+          "advisoryId": "DUMPSCAN-GO-0002",
+          "advisoryModified": "2025-07-20T00:00:00Z",
+          "advisoryDigest": "sha256:a522fe5ba2530d1eb91efdfc0e699477289d716ad23c9c0228c9992fa4e92fdf",
+          "matchedRange": {
+            "type": "SEMVER",
+            "introduced": "0",
+            "fixed": "v0.15.0",
+            "lastAffected": null,
+            "limit": null
+          },
+          "aliases": [
+            "GO-2025-0002"
+          ],
+          "severity": [],
+          "status": "affected",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "lockfile": "gradle.lockfile",
+      "workspaceRoot": ".",
+      "inputDigest": "sha256:76b2fc8bcb12e3e21b693a313e2c8beb2279d130420e7b94107d1bb6ad6960f2",
+      "matcherVersion": "0.1.0",
+      "findingsRoot": "sha256:2264e367695c30140b1760cda1132b25326eae8353eccea9cbf4fca81ccb5341",
+      "findingsCount": 1,
+      "ecosystems": [
+        "Maven"
+      ],
+      "manifest": {
+        "manifestVersion": "dumpscan.input/v1",
+        "format": "gradle.lockfile",
+        "lockfileDigest": "sha256:617aa11c3a5399427035bed532a40cef9a1732e6ab74da9cdb607ff7f4da883e",
+        "workspaceRoot": ".",
+        "overApproximated": false,
+        "packages": [
+          {
+            "ecosystem": "Maven",
+            "name": "org.example.other:helper",
+            "version": "1.4.7",
+            "purl": "pkg:maven/org.example.other/helper@1.4.7"
+          },
+          {
+            "ecosystem": "Maven",
+            "name": "org.example.sample:sample-core",
+            "version": "2.16.0",
+            "purl": "pkg:maven/org.example.sample/sample-core@2.16.0"
+          }
+        ],
+        "unresolved": []
+      },
+      "findings": [
+        {
+          "ecosystem": "Maven",
+          "name": "org.example.other:helper",
+          "version": "1.4.7",
+          "purl": "pkg:maven/org.example.other/helper@1.4.7",
+          "advisoryId": "DUMPSCAN-MAVEN-0002",
+          "advisoryModified": "2025-08-09T00:00:00Z",
+          "advisoryDigest": "sha256:1e342ec29d65d3c845ecd247d9a052c7a7de47a1c65d3cbd04e38170877012f1",
+          "matchedRange": {
+            "type": "ECOSYSTEM",
+            "introduced": "1.0",
+            "fixed": null,
+            "lastAffected": "1.4.7",
+            "limit": null
+          },
+          "aliases": [],
+          "severity": [],
+          "status": "affected",
+          "reason": null
+        }
+      ]
+    }
+  ]
+}
