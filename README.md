@@ -35,8 +35,9 @@ success, 1 for findings present or a verification or replay mismatch, 2 for a
 usage error or a run that could not finish, and 3 for an unexplained divergence
 in `diff`.
 
-Every example below is real output, produced against `fixtures/` in this
-repository.
+Every example below was captured from a real run against `fixtures/` in this
+repository. Long digests are shortened where the point is the shape rather than
+the value.
 
 ### snapshot
 
@@ -181,9 +182,15 @@ feed difference      3
 range interpretation 0
 suppression          1
 
+  feed-difference      pkg:npm/%40sample/widget@1.4.7 DUMPSCAN-NPM-0002
+                       dumpscan has DUMPSCAN-NPM-0002 for this package and the
+                       external scanner does not report it
   feed-difference      pkg:npm/polyglot@1.9.0 CVE-2021-22222
                        grype has CVE-2021-22222 for this package and the pinned
                        OSV snapshot has no advisory under that id or any of its aliases
+  feed-difference      pkg:npm/polyglot@1.9.0 DUMPSCAN-MULTI-0001
+                       dumpscan has DUMPSCAN-MULTI-0001 for this package and the
+                       external scanner does not report it
   identifier-mismatch  pkg:generic/node@18.0.0 CVE-2019-11111
                        grype matched node 18.0.0 on cpe-match, and that package
                        is not in the input manifest
