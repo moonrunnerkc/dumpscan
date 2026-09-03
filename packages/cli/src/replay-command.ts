@@ -97,7 +97,10 @@ export async function runReplay(args: ParsedArgs): Promise<CommandOutput> {
       field: 'snapshotManifestDigest',
       recorded: recorded.snapshotManifestDigest,
       observed: observedSnapshotManifest,
-      meaning: 'the snapshot has the same records but was downloaded from a different source',
+      meaning:
+        snapshot.feedDigest === recorded.feedDigest
+          ? 'the snapshot holds the same records but was downloaded from a different source'
+          : 'the manifest moved with the feed, which the feed digest already said',
     });
   }
 
