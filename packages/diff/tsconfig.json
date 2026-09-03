@@ -12,22 +12,22 @@
       "path": "../canon"
     },
     {
-      "path": "../merkle"
-    },
-    {
-      "path": "../osv"
-    },
-    {
-      "path": "../versions"
-    },
-    {
       "path": "../lockfiles"
     },
     {
       "path": "../match"
     },
     {
+      "path": "../merkle"
+    },
+    {
+      "path": "../osv"
+    },
+    {
       "path": "../predicate"
+    },
+    {
+      "path": "../versions"
     }
   ]
 }
