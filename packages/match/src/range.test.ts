@@ -215,6 +215,12 @@ describe('sortEvents', () => {
     expect(sortEvents(semver, [event({}), event({})])).toHaveLength(2);
   });
 
+  it('orders an event with no field at all last among the versionless ones', () => {
+    const sorted = sortEvents(semver, [event({}), event({ limit: '1.0.0' })]);
+    expect(sorted[0]?.limit).toBe('1.0.0');
+    expect(sorted[1]?.limit).toBeNull();
+  });
+
   it('does not compare the zero sentinel with the ecosystem comparator', () => {
     // pep440 refuses "0" only in the sense that it is a valid version there, so
     // use a comparator that would throw on it to prove the sentinel short

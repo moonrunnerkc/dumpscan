@@ -153,6 +153,43 @@ describe('matchManifest', () => {
     expect(result.ecosystems).toStrictEqual([]);
   });
 
+  it('refuses to judge an expiry without being told which instant to judge it at', () => {
+    expect(() =>
+      matchManifest(manifest([inputPackage('npm', 'Widget', '1.0.0')]), source([]), {
+        exclusions: [
+          { advisoryId: 'a', purl: null, justification: 'j', expires: null },
+          { advisoryId: 'b', purl: null, justification: 'j', expires: '2030-01-01T00:00:00Z' },
+        ],
+      }),
+    ).toThrow(/an exclusion has an expiry and no evaluationTime was given/);
+  });
+
+  it('needs no evaluation time when nothing expires', () => {
+    const result = matchManifest(
+      manifest([inputPackage('npm', 'Widget', '1.0.0')]),
+      source([['npm', 'widget', [widgetAdvisory]]]),
+      { exclusions: [{ advisoryId: 'DUMPSCAN-A', purl: null, justification: 'j', expires: null }] },
+    );
+    expect(result.findings[0]?.status).toBe('excluded');
+  });
+
+  it('applies a purl scoped exclusion only to that package', () => {
+    const exclusions = [
+      {
+        advisoryId: 'DUMPSCAN-A',
+        purl: 'pkg:npm/somethingelse@1.0.0',
+        justification: 'j',
+        expires: null,
+      },
+    ];
+    const result = matchManifest(
+      manifest([inputPackage('npm', 'Widget', '1.0.0')]),
+      source([['npm', 'widget', [widgetAdvisory]]]),
+      { exclusions },
+    );
+    expect(result.findings[0]?.status).toBe('affected');
+  });
+
   it('stamps the matcher version', () => {
     const result = matchManifest(manifest([]), source([]));
     expect(result.matcherVersion).toBe(MATCHER_VERSION);

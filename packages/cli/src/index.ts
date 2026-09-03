@@ -4,7 +4,10 @@ import { EXIT_OK, EXIT_USAGE, UsageError } from './exit.js';
 import { HELP } from './help.js';
 import { print } from './output.js';
 import type { CommandOutput } from './output.js';
+import { runDiff } from './diff-command.js';
+import { runExplain } from './explain-command.js';
 import { runProve } from './prove-command.js';
+import { runReplay } from './replay-command.js';
 import { runScan } from './scan-command.js';
 import { runSnapshot } from './snapshot-command.js';
 import { runVerify } from './verify-command.js';
@@ -69,6 +72,12 @@ async function dispatch(command: string, args: ParsedArgs): Promise<CommandOutpu
       return runVerify(args);
     case 'prove':
       return Promise.resolve(runProve(args));
+    case 'replay':
+      return Promise.resolve(runReplay(args));
+    case 'diff':
+      return Promise.resolve(runDiff(args));
+    case 'explain':
+      return Promise.resolve(runExplain(args));
     default:
       throw new UsageError(
         `dumpscan: ${JSON.stringify(command)} is not a dumpscan command; run dumpscan --help`,

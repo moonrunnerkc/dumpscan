@@ -1,10 +1,11 @@
 import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 
-import { canonicalBytes } from '@dumpscan/canon';
+import { canonicalBytes, parseJson } from '@dumpscan/canon';
 import { basename, inputDigest, manifestToJson, parseLockfile } from '@dumpscan/lockfiles';
 import type { InputManifest } from '@dumpscan/lockfiles';
-import { findingToJson, matchManifest } from '@dumpscan/match';
+import { findingToJson, matchManifest, parseExclusions } from '@dumpscan/match';
+import type { Exclusions } from '@dumpscan/match';
 import { manifestDigest, openSnapshot } from '@dumpscan/osv';
 import { buildStatement, statementToJson } from '@dumpscan/predicate';
 import type { ScanPredicate } from '@dumpscan/predicate';
@@ -55,20 +56,36 @@ export async function runScan(args: ParsedArgs): Promise<CommandOutput> {
   );
   const snapshot = openSnapshot(resolveSnapshot(snapshotRef, args.options.get('cache')));
 
-  const parsed = parseLockfile(lockfilePath, readFileSync(lockfilePath));
+  const parsed = parseLockfile(
+    lockfilePath,
+    readFileSync(lockfilePath),
+    readSidecars(lockfilePath),
+  );
   const workspace = args.options.get('workspace') ?? '.';
   const manifest = selectManifest(parsed.manifests, workspace, lockfilePath);
-  const result = matchManifest(manifest, snapshot);
+
+  const exclusions = readExclusions(args);
+  // The matcher never reads the clock. When an exclusion can expire, the CLI
+  // reads the instant once, hands it to the matcher, and records it in the
+  // predicate so a replay judges the same expiries the same way.
+  const evaluationTime =
+    exclusions?.hasExpiry === true ? new Date().toISOString().replace(/\.\d+Z$/, 'Z') : undefined;
+
+  const result = matchManifest(manifest, snapshot, {
+    ...(exclusions === undefined ? {} : { exclusions: exclusions.exclusions }),
+    ...(evaluationTime === undefined ? {} : { evaluationTime }),
+  });
 
   const predicate: ScanPredicate = {
     feedDigest: snapshot.feedDigest,
     snapshotManifestDigest: manifestDigest(snapshot.manifest),
     matcherVersion: result.matcherVersion,
     comparatorRulesetDigest: rulesetDigest(),
-    exclusionsDigest: null,
+    exclusionsDigest: exclusions?.digest ?? null,
     findingsRoot: result.findingsRoot,
     findingsCount: result.findings.length,
     ecosystems: result.ecosystems,
+    ...(evaluationTime === undefined ? {} : { evaluationTime }),
   };
 
   const statement = buildStatement({
@@ -104,6 +121,7 @@ export async function runScan(args: ParsedArgs): Promise<CommandOutput> {
       `feed          ${predicate.feedDigest}`,
       `comparators   ${predicate.comparatorRulesetDigest}`,
       `matcher       ${predicate.matcherVersion}`,
+      `exclusions    ${predicate.exclusionsDigest ?? 'none'}`,
       `findings      ${String(result.findings.length)} total, ${String(affected.length)} affected`,
       `findingsRoot  ${predicate.findingsRoot}`,
       `bundle        ${out}`,
@@ -117,6 +135,22 @@ export async function runScan(args: ParsedArgs): Promise<CommandOutput> {
       findings: result.findings.map(findingToJson),
     },
   };
+}
+
+/** `go.sum` reads the `go.mod` beside it; every other format reads nothing else. */
+function readSidecars(lockfilePath: string): Record<string, string> {
+  const sidecar = join(dirname(resolve(lockfilePath)), 'go.mod');
+  if (!existsSync(sidecar)) return {};
+  return { 'go.mod': readFileSync(sidecar, 'utf8') };
+}
+
+function readExclusions(args: ParsedArgs): Exclusions | undefined {
+  const path = args.options.get('exclusions');
+  if (path === undefined || path === '') return undefined;
+  if (!existsSync(path)) {
+    throw new UsageError(`dumpscan scan: ${path} does not exist`);
+  }
+  return parseExclusions(parseJson(readFileSync(path, 'utf8')), path);
 }
 
 function selectManifest(

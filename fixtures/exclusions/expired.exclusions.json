@@ -1,0 +1,9 @@
+{
+  "exclusions": [
+    {
+      "advisoryId": "DUMPSCAN-NPM-0001",
+      "justification": "waiting on the upstream fix",
+      "expires": "2020-01-01T00:00:00Z"
+    }
+  ]
+}

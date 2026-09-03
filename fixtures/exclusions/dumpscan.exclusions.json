@@ -1,0 +1,14 @@
+{
+  "exclusions": [
+    {
+      "advisoryId": "DUMPSCAN-NPM-0001",
+      "purl": "pkg:npm/cheeseparser@4.17.20",
+      "justification": "the vulnerable code path is not reachable from this application"
+    },
+    {
+      "advisoryId": "CVE-2025-90002",
+      "justification": "mitigated by the reverse proxy in front of the service",
+      "expires": "2099-01-01T00:00:00Z"
+    }
+  ]
+}

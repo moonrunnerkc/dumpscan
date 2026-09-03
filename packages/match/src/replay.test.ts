@@ -4,7 +4,7 @@ import { join } from 'node:path';
 
 import { parseJson } from '@dumpscan/canon';
 import type { JsonValue } from '@dumpscan/canon';
-import { inputDigest, manifestToJson, parseLockfile } from '@dumpscan/lockfiles';
+import { inputDigest, manifestToJson, parseLockfile, parserFor } from '@dumpscan/lockfiles';
 import { buildSnapshot, openSnapshot } from '@dumpscan/osv';
 import { rulesetDigest } from '@dumpscan/versions';
 import { beforeAll, describe, expect, it } from 'vitest';
@@ -53,11 +53,20 @@ function bundleOf(name: string): Bundle {
   return parseJson(readFileSync(join(BUNDLES, name, 'expected.json'), 'utf8')) as unknown as Bundle;
 }
 
-function lockfilesIn(name: string): string[] {
-  const dir = join(BUNDLES, name);
-  return readdirSync(dir)
+/**
+ * Files a parser claims are lockfiles; everything else beside them is a sidecar,
+ * such as the go.mod a go.sum reads to learn the main module path.
+ */
+function splitDirectory(dir: string): { lockfiles: string[]; sidecars: Record<string, string> } {
+  const files = readdirSync(dir)
     .sort(byName)
     .filter((entry) => entry !== 'expected.json' && statSync(join(dir, entry)).isFile());
+  const lockfiles = files.filter((entry) => parserFor(entry) !== undefined);
+  const sidecars: Record<string, string> = {};
+  for (const entry of files) {
+    if (!lockfiles.includes(entry)) sidecars[entry] = readFileSync(join(dir, entry), 'utf8');
+  }
+  return { lockfiles, sidecars };
 }
 
 describe('replay', () => {
@@ -78,8 +87,9 @@ describe('replay', () => {
     const snapshot = openSnapshot(snapshotDir);
     const produced: Scan[] = [];
 
-    for (const filename of lockfilesIn(name)) {
-      const parsed = parseLockfile(filename, readFileSync(join(BUNDLES, name, filename)));
+    const { lockfiles, sidecars } = splitDirectory(join(BUNDLES, name));
+    for (const filename of lockfiles) {
+      const parsed = parseLockfile(filename, readFileSync(join(BUNDLES, name, filename)), sidecars);
       for (const manifest of parsed.manifests) {
         const result = matchManifest(manifest, snapshot);
         produced.push({
@@ -117,11 +127,12 @@ describe('replay', () => {
     }
   });
 
-  it.each(cases)('%s covers every finding status the matcher can produce', (name) => {
-    const bundle = bundleOf(name);
+  it('covers every finding status the matcher can produce without exclusions', () => {
     const statuses = new Set(
-      bundle.scans.flatMap((scan) =>
-        scan.findings.map((finding) => (finding as { status: string }).status),
+      cases.flatMap((name) =>
+        bundleOf(name).scans.flatMap((scan) =>
+          scan.findings.map((finding) => (finding as { status: string }).status),
+        ),
       ),
     );
     expect([...statuses].sort(byName)).toStrictEqual([
@@ -129,5 +140,12 @@ describe('replay', () => {
       'unevaluated',
       'withdrawn-suppressed',
     ]);
+  });
+
+  it('covers every ecosystem dumpscan scans', () => {
+    const ecosystems = new Set(
+      cases.flatMap((name) => bundleOf(name).scans.flatMap((scan) => [...scan.ecosystems])),
+    );
+    expect([...ecosystems].sort(byName)).toStrictEqual(['Go', 'Maven', 'PyPI', 'crates.io', 'npm']);
   });
 });

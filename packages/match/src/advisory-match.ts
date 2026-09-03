@@ -2,14 +2,11 @@ import { digestOfJson } from '@dumpscan/canon';
 import type { InputPackage } from '@dumpscan/lockfiles';
 import { baseEcosystem } from '@dumpscan/osv';
 import type { OsvAdvisory, OsvAffected } from '@dumpscan/osv';
-import { comparatorByName, comparatorFor } from '@dumpscan/versions';
+import { comparatorFor, comparatorForRange } from '@dumpscan/versions';
 import type { Comparator } from '@dumpscan/versions';
 
 import type { Finding, FindingStatus, MatchedRange } from './finding.js';
 import { evaluateRange, rangeVersions } from './range.js';
-
-/** Range types dumpscan evaluates. `GIT` is recorded, never evaluated, in v1. */
-const EVALUATED_RANGE_TYPES = new Set(['SEMVER', 'ECOSYSTEM']);
 
 interface Outcome {
   readonly status: FindingStatus;
@@ -81,22 +78,15 @@ function evaluateAffected(entry: OsvAffected, pkg: InputPackage): Outcome | null
   if (listed !== null) outcomes.push(listed);
 
   for (const range of entry.ranges) {
-    if (!EVALUATED_RANGE_TYPES.has(range.type)) {
-      outcomes.push({
-        status: 'unevaluated',
-        matchedRange: null,
-        reason: `dumpscan does not evaluate ${range.type} ranges, so this package may or may not be affected`,
-      });
-      continue;
-    }
-
-    const comparator =
-      range.type === 'SEMVER' ? (comparatorByName('semver') as Comparator) : ecosystemComparator;
+    // versions decides which comparator reads a range, and answering undefined
+    // is how it says dumpscan does not evaluate that range type at all. GIT is
+    // the case that matters in v1.
+    const comparator = comparatorForRange(pkg.ecosystem, range.type);
     if (comparator === undefined) {
       outcomes.push({
         status: 'unevaluated',
         matchedRange: null,
-        reason: `dumpscan has no version comparator for ${pkg.ecosystem}, so its ECOSYSTEM ranges cannot be evaluated`,
+        reason: `dumpscan does not evaluate ${range.type} ranges, so this package may or may not be affected`,
       });
       continue;
     }

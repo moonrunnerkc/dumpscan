@@ -6,8 +6,11 @@ usage: dumpscan <command> [options]
 commands:
   snapshot   Build a feed snapshot from OSV or from a local mirror
   scan       Scan a lockfile against a pinned snapshot
+  replay     Re-derive a bundle's findings from its pinned inputs
   verify     Check a bundle's signature, identity, and digests
+  diff       Attribute every changed finding to exactly one pinned input
   prove      Emit a Merkle inclusion proof for a finding and its advisory
+  explain    Bucket every disagreement with Grype or Trivy
 
 dumpscan snapshot [--ecosystems <list>] [--from <dir>] [--out <dir>] [--base-url <url>]
   Downloads the OSV archives and builds a content addressed snapshot, or builds
@@ -23,10 +26,19 @@ dumpscan scan <lockfile> --snapshot <digest|path> [options]
   --findings <path>         Also write the findings on their own.
   --sign                    Sign keylessly with Sigstore.
   --identity-token <jwt>    OIDC token for keyless signing.
+  --exclusions <path>       dumpscan.exclusions.json or an OpenVEX document.
   --key <path>              Sign with a plain ed25519 key instead. Opt in only.
   --public-key <path>       Public key to record. Derived from --key by default.
 
     dumpscan scan package-lock.json --snapshot sha256:77f3f140... --sign
+
+dumpscan replay <bundle> [--lockfile <path>] [--snapshot <digest|path>] [--exclusions <path>]
+  Resolves the pinned snapshot, re-parses the input, re-matches, and asserts the
+  findings root. Refuses when the installed comparator ruleset differs from the
+  one that produced the bundle, unless --explain is passed. Names which of the
+  four digests moved on any mismatch.
+
+    dumpscan replay dumpscan.bundle.json --lockfile package-lock.json
 
 dumpscan verify <bundle> [--identity <pattern>] [--issuer <url>] [--tuf-cache <dir>]
   Checks the signature, the certificate identity, log inclusion, and that the
@@ -35,11 +47,27 @@ dumpscan verify <bundle> [--identity <pattern>] [--issuer <url>] [--tuf-cache <d
 
     dumpscan verify dumpscan.bundle.json --issuer https://token.actions.githubusercontent.com
 
+dumpscan diff <bundle-a> <bundle-b> [--snapshot-a <path>] [--snapshot-b <path>]
+  Compares the four pinned digests, then attributes every changed finding to
+  exactly one of them: the input, the feed, the comparators, or the exclusions.
+  A change nothing explains exits 3, because that is a bug in dumpscan rather
+  than a fact about the two scans.
+
+    dumpscan diff before.bundle.json after.bundle.json --snapshot-b ./snapshot
+
 dumpscan prove <bundle> <advisory-id> [--snapshot <digest|path>]
   Emits the inclusion proof for a finding against the findings root, and with
   --snapshot the proof that the advisory is in the feed.
 
     dumpscan prove dumpscan.bundle.json GHSA-aaaa-bbbb-cccc --snapshot ./snapshot
+
+dumpscan explain <bundle> <grype-or-trivy-json>
+  Aligns another scanner's findings to the manifest dumpscan scanned and buckets
+  every disagreement as an identifier mismatch, a feed difference, a range
+  interpretation, or a suppression. Never signed: it is a claim about another
+  tool, not about the code.
+
+    dumpscan explain dumpscan.bundle.json grype.json
 
 global options:
   --json     Machine readable output

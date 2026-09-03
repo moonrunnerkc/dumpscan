@@ -51,7 +51,7 @@ describe('matchAdvisory range and version list handling', () => {
     expect(finding?.reason).toMatch(/does not evaluate FUTURE ranges/);
   });
 
-  it('records an ecosystem with no comparator as unevaluated', () => {
+  it('evaluates a crates.io ECOSYSTEM range with the cargo comparator', () => {
     const finding = matchAdvisory(
       advisory([
         {
@@ -61,8 +61,21 @@ describe('matchAdvisory range and version list handling', () => {
       ]),
       cargo('0.5.0'),
     );
+    expect(finding?.status).toBe('affected');
+  });
+
+  it('records a range type it has no comparator for as unevaluated', () => {
+    const finding = matchAdvisory(
+      advisory([
+        {
+          package: { ecosystem: 'crates.io', name: 'sample-crate' },
+          ranges: [{ type: 'GIT', events: [{ introduced: '0' }] }],
+        },
+      ]),
+      cargo('0.5.0'),
+    );
     expect(finding?.status).toBe('unevaluated');
-    expect(finding?.reason).toMatch(/no version comparator for crates.io/);
+    expect(finding?.reason).toMatch(/does not evaluate GIT ranges/);
   });
 
   it('records a version the comparator cannot read as unevaluated', () => {
