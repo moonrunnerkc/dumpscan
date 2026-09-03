@@ -68,6 +68,19 @@ for (const file of files) {
   }
 }
 
+// matcherVersion is written into every predicate, so the constant the engine
+// exports and the version npm would publish have to be the same string.
+{
+  const pkg = JSON.parse(readFileSync(join(root, 'packages/match/package.json'), 'utf8'));
+  const engine = readFileSync(join(root, 'packages/match/src/engine.ts'), 'utf8');
+  const declared = /MATCHER_VERSION = '([^']+)'/.exec(engine)?.[1];
+  if (declared !== pkg.version) {
+    failures.push(
+      `packages/match/src/engine.ts declares MATCHER_VERSION ${declared} but packages/match/package.json is ${pkg.version}; the predicate would claim a matcher version that was never published`,
+    );
+  }
+}
+
 if (failures.length > 0) {
   console.error('Convention violations:');
   for (const f of failures.sort()) console.error(`  ${f}`);

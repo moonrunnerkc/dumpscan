@@ -1,7 +1,16 @@
 // Emits the byte artifacts that the determinism harness and the cross-OS CI
-// matrix compare. Every case here is a fixture scan run end to end from built
-// packages, so the bytes are exactly what a user would get.
-import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+// matrix compare: the snapshot manifest, and the findings of every fixture
+// bundle scanned against it. Every artifact is canonical bytes produced the same
+// way a user's scan would produce them.
+import {
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  statSync,
+  writeFileSync,
+} from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 const root = new URL('..', import.meta.url).pathname;
@@ -12,37 +21,59 @@ if (outDir === undefined) {
   );
   process.exit(2);
 }
-mkdirSync(outDir, { recursive: true });
 
-const casesDir = join(root, 'fixtures/corpus');
-let caseNames = [];
-try {
-  caseNames = readdirSync(casesDir).sort();
-} catch {
-  caseNames = [];
-}
-
-const emitted = [];
-for (const name of caseNames) {
-  const specPath = join(casesDir, name, 'case.json');
-  let spec;
-  try {
-    spec = JSON.parse(readFileSync(specPath, 'utf8'));
-  } catch {
-    continue;
-  }
-  const { runCase } = await import('./corpus-case.mjs');
-  const artifacts = await runCase(root, join(casesDir, name), spec);
-  for (const [file, bytes] of artifacts) {
-    const target = join(outDir, name, file);
-    mkdirSync(join(outDir, name), { recursive: true });
-    writeFileSync(target, bytes);
-    emitted.push(`${name}/${file}`);
-  }
-}
-
-writeFileSync(
-  join(outDir, 'corpus-index.txt'),
-  emitted.sort().join('\n') + (emitted.length > 0 ? '\n' : ''),
+const {
+  buildSnapshot,
+  openSnapshot,
+  manifestToJson: snapshotToJson,
+} = await import(join(root, 'packages/osv/dist/index.js'));
+const { parseLockfile, inputDigest, manifestToJson } = await import(
+  join(root, 'packages/lockfiles/dist/index.js')
 );
-console.log(`emitted ${emitted.length} artifact(s) from ${caseNames.length} case(s)`);
+const { matchManifest, findingToJson } = await import(join(root, 'packages/match/dist/index.js'));
+const { canonicalBytes } = await import(join(root, 'packages/canon/dist/index.js'));
+const { rulesetDigest } = await import(join(root, 'packages/versions/dist/index.js'));
+
+const snapshotDir = mkdtempSync(join(tmpdir(), 'dumpscan-corpus-'));
+const built = buildSnapshot(join(root, 'fixtures/osv/synthetic/records'), snapshotDir);
+const snapshot = openSnapshot(snapshotDir);
+
+mkdirSync(outDir, { recursive: true });
+const emitted = [];
+
+function write(name, value) {
+  const path = join(outDir, name);
+  mkdirSync(join(path, '..'), { recursive: true });
+  writeFileSync(path, canonicalBytes(value));
+  emitted.push(name);
+}
+
+write('snapshot-manifest.json', snapshotToJson(built.manifest));
+write('comparator-ruleset.json', { comparatorRulesetDigest: rulesetDigest() });
+
+const bundles = join(root, 'fixtures/bundles');
+for (const bundle of readdirSync(bundles).sort()) {
+  const dir = join(bundles, bundle);
+  const lockfiles = readdirSync(dir)
+    .sort()
+    .filter((entry) => entry !== 'expected.json' && statSync(join(dir, entry)).isFile());
+
+  for (const filename of lockfiles) {
+    const parsed = parseLockfile(filename, readFileSync(join(dir, filename)));
+    for (const manifest of parsed.manifests) {
+      const result = matchManifest(manifest, snapshot);
+      const slug = `${filename}--${manifest.workspaceRoot}`.replaceAll(/[^A-Za-z0-9._-]/g, '_');
+      write(`${bundle}/${slug}.findings.json`, {
+        feedDigest: built.feedDigest,
+        inputDigest: inputDigest(manifest),
+        matcherVersion: result.matcherVersion,
+        findingsRoot: result.findingsRoot,
+        manifest: manifestToJson(manifest),
+        findings: result.findings.map(findingToJson),
+      });
+    }
+  }
+}
+
+writeFileSync(join(outDir, 'corpus-index.txt'), `${emitted.sort().join('\n')}\n`);
+console.log(`emitted ${emitted.length} artifact(s)`);

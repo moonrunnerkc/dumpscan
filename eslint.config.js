@@ -148,6 +148,11 @@ export const config = tseslint.config(
     rules: {
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
+      // A test in a pure package still has to read its golden fixtures. The ban
+      // exists so the shipped module cannot touch the filesystem, and a test
+      // file is not shipped. Everything else in the purity set stays on: a test
+      // that reads the clock or the locale is exactly the leak being hunted.
+      'no-restricted-imports': 'off',
     },
   },
   {

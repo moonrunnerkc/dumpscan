@@ -18,7 +18,9 @@
     "test:coverage": "vitest run --coverage",
     "test:determinism": "tsc -b && node scripts/determinism.mjs",
     "test:mutation": "stryker run",
-    "gen:corpus": "node scripts/generate-corpus-module.mjs"
+    "gen:corpus": "node scripts/generate-corpus-module.mjs",
+    "gen:goldens": "node scripts/generate-lockfile-goldens.mjs",
+    "gen:bundles": "node scripts/generate-replay-bundles.mjs"
   },
   "devDependencies": {
     "@stryker-mutator/core": "10.0.0",
