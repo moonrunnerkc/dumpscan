@@ -1,6 +1,6 @@
 import { flag, parseArgs } from './args.js';
 import type { ParsedArgs } from './args.js';
-import { EXIT_OK, EXIT_USAGE, UsageError } from './exit.js';
+import { EXIT_OK, EXIT_USAGE, messageOf, UsageError } from './exit.js';
 import { HELP } from './help.js';
 import { print } from './output.js';
 import type { CommandOutput } from './output.js';
@@ -88,11 +88,7 @@ async function dispatch(command: string, args: ParsedArgs): Promise<CommandOutpu
   }
 }
 
-function messageOf(error: unknown): string {
-  return error instanceof Error ? error.message : String(error);
-}
-
-export { EXIT_OK, EXIT_USAGE, UsageError } from './exit.js';
+export { EXIT_OK, EXIT_USAGE, messageOf, UsageError } from './exit.js';
 export { EXIT_FINDINGS, EXIT_UNEXPLAINED } from './exit.js';
 export { parseArgs } from './args.js';
 export type { ParsedArgs } from './args.js';
