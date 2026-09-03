@@ -20,7 +20,8 @@
     "test:mutation": "stryker run",
     "gen:corpus": "node scripts/generate-corpus-module.mjs",
     "gen:goldens": "node scripts/generate-lockfile-goldens.mjs",
-    "gen:bundles": "node scripts/generate-replay-bundles.mjs"
+    "gen:bundles": "node scripts/generate-replay-bundles.mjs",
+    "gen:schema": "node scripts/generate-schema.mjs"
   },
   "devDependencies": {
     "@stryker-mutator/core": "10.0.0",

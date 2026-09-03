@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dumpscan.dev/schema/scan-v1.schema.json",
+  "title": "dumpscan scan statement",
+  "description": "An in-toto Statement v1 binding a set of findings to the exact input, feed, matcher, and exclusions that produced them.",
+  "type": "object",
+  "required": [
+    "_type",
+    "subject",
+    "predicateType",
+    "predicate"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "_type": {
+      "const": "https://in-toto.io/Statement/v1"
+    },
+    "predicateType": {
+      "const": "https://dumpscan.dev/scan/v1"
+    },
+    "subject": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "digest"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^\\S(?:.*\\S)?$"
+          },
+          "digest": {
+            "type": "object",
+            "required": [
+              "sha256"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            }
+          }
+        }
+      }
+    },
+    "predicate": {
+      "type": "object",
+      "required": [
+        "feedDigest",
+        "snapshotManifestDigest",
+        "matcherVersion",
+        "comparatorRulesetDigest",
+        "exclusionsDigest",
+        "findingsRoot",
+        "findingsCount",
+        "ecosystems"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "feedDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "snapshotManifestDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "matcherVersion": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?$"
+        },
+        "comparatorRulesetDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "exclusionsDigest": {
+          "description": "Digest of the applied exclusions or OpenVEX file, or null when none.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "findingsRoot": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "findingsCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "ecosystems": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "Go",
+              "Maven",
+              "PyPI",
+              "crates.io",
+              "npm"
+            ]
+          }
+        },
+        "evaluationTime": {
+          "description": "The instant expiries were compared against. Present only when the exclusions file contains at least one expiry, and the only time dependent field in the body.",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?Z$"
+        }
+      }
+    }
+  }
+}
