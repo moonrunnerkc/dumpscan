@@ -16,7 +16,7 @@ a finding.
 ## Decision
 
 **Tree shape.** Findings leaves are sorted by leaf hash, the same rule the feed's
-ecosystem trees use. The findings *file* is sorted by ecosystem, name, version,
+ecosystem trees use. The findings _file_ is sorted by ecosystem, name, version,
 advisory id, then advisory digest, which is what a person reads. The two orders
 are independent on purpose: the root does not move if the file ordering rule ever
 changes, and `prove` indexes both trees the same way.
