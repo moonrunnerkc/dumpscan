@@ -79,7 +79,9 @@ bundle        day1.bundle.json
 
 `--snapshot` takes a digest or a path and is required. There is no `--latest`,
 because two runs of the same command have to make the same claim. Add `--sign`
-to sign keylessly with Sigstore.
+to sign keylessly with Sigstore, and `--sarif <path>` to also write a SARIF
+2.1.0 log for GitHub code scanning. SARIF is derived and never the source of
+truth: the bundle is the claim.
 
 ### replay
 
