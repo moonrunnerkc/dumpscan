@@ -9,6 +9,7 @@ const LINE_CAP = 300;
 const EM_DASH = String.fromCharCode(0x2014);
 const KEBAB = /^[a-z0-9]+(-[a-z0-9]+)*(\.[a-z0-9]+)*$/;
 const PATHNAME_ON_FILE_URL = /import\.meta\.url\s*\)\s*\.pathname/;
+const RUNTIME_REGEXP = /new RegExp\(/;
 const SKIP_DIRS = new Set(['node_modules', 'dist', 'coverage', 'reports', '.git', '.determinism']);
 const TEXT_EXT = /\.(ts|mjs|js|json|md|yml|yaml|txt|toml)$/;
 
@@ -66,6 +67,18 @@ for (const file of files) {
       failures.push(
         `${rel}:${line}: reads .pathname off an import.meta.url URL, which is not a path on Windows; use fileURLToPath from node:url`,
       );
+    }
+
+    // A regex built from a value is a regex built from whatever separators and
+    // metacharacters that value happens to contain. A Windows path is both.
+    if (file.endsWith('.test.ts')) {
+      const runtimeRegexp = RUNTIME_REGEXP.exec(source);
+      if (runtimeRegexp !== null) {
+        const line = source.slice(0, runtimeRegexp.index).split('\n').length;
+        failures.push(
+          `${rel}:${line}: builds a RegExp from a value; assert the literal string instead, because toThrow and toMatch already match a substring`,
+        );
+      }
     }
   }
 
