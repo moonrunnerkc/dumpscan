@@ -114,6 +114,9 @@ importers:
       '@dumpscan/match':
         specifier: workspace:*
         version: link:../match
+      '@dumpscan/osv':
+        specifier: workspace:*
+        version: link:../osv
       '@dumpscan/predicate':
         specifier: workspace:*
         version: link:../predicate

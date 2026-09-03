@@ -1,0 +1,118 @@
+name: dumpscan
+description: Scan a lockfile against a pinned OSV snapshot and sign the result with Sigstore
+author: dumpscan
+
+branding:
+  icon: shield
+  color: blue
+
+inputs:
+  lockfile:
+    description: Path to the lockfile to scan
+    required: true
+  snapshot:
+    description: >-
+      Feed digest or path of the snapshot to scan against. dumpscan never picks
+      one for you: two runs of the same workflow have to make the same claim.
+    required: true
+  workspace:
+    description: Which resolved package set to scan. Defaults to the whole lockfile.
+    required: false
+    default: '.'
+  exclusions:
+    description: Path to a dumpscan.exclusions.json or an OpenVEX document
+    required: false
+    default: ''
+  base-bundle:
+    description: >-
+      A bundle from an earlier run to diff against. The check fails on any
+      unexplained divergence.
+    required: false
+    default: ''
+  base-snapshot:
+    description: Snapshot the base bundle was scanned against, for record level diffs
+    required: false
+    default: ''
+  sign:
+    description: Sign keylessly with the workflow OIDC identity
+    required: false
+    default: 'true'
+  sarif:
+    description: Path to write SARIF to. Empty to skip.
+    required: false
+    default: 'dumpscan.sarif'
+  bundle:
+    description: Path to write the scan bundle to
+    required: false
+    default: 'dumpscan.bundle.json'
+  fail-on-findings:
+    description: Fail the check when an affected finding is not covered by an exclusion
+    required: false
+    default: 'true'
+  dumpscan-version:
+    description: Version of the dumpscan CLI to run
+    required: false
+    default: 'latest'
+
+outputs:
+  bundle:
+    description: Path to the bundle that was written
+    value: ${{ steps.scan.outputs.bundle }}
+  feed-digest:
+    description: Feed digest the scan was pinned to
+    value: ${{ steps.scan.outputs.feed-digest }}
+  findings-root:
+    description: Merkle root over the findings
+    value: ${{ steps.scan.outputs.findings-root }}
+  affected:
+    description: Number of findings with status affected
+    value: ${{ steps.scan.outputs.affected }}
+
+runs:
+  using: composite
+  steps:
+    - name: Scan and sign
+      id: scan
+      shell: bash
+      env:
+        DUMPSCAN_VERSION: ${{ inputs.dumpscan-version }}
+        DUMPSCAN_LOCKFILE: ${{ inputs.lockfile }}
+        DUMPSCAN_SNAPSHOT: ${{ inputs.snapshot }}
+        DUMPSCAN_WORKSPACE: ${{ inputs.workspace }}
+        DUMPSCAN_EXCLUSIONS: ${{ inputs.exclusions }}
+        DUMPSCAN_BUNDLE: ${{ inputs.bundle }}
+        DUMPSCAN_SARIF: ${{ inputs.sarif }}
+        DUMPSCAN_SIGN: ${{ inputs.sign }}
+      run: ${{ github.action_path }}/scripts/scan.sh
+
+    - name: Diff against the base bundle
+      if: inputs.base-bundle != ''
+      shell: bash
+      env:
+        DUMPSCAN_VERSION: ${{ inputs.dumpscan-version }}
+        DUMPSCAN_BUNDLE: ${{ inputs.bundle }}
+        DUMPSCAN_BASE_BUNDLE: ${{ inputs.base-bundle }}
+        DUMPSCAN_BASE_SNAPSHOT: ${{ inputs.base-snapshot }}
+        DUMPSCAN_SNAPSHOT: ${{ inputs.snapshot }}
+      run: ${{ github.action_path }}/scripts/diff.sh
+
+    - name: Upload the bundle
+      uses: actions/upload-artifact@v4
+      with:
+        name: dumpscan-bundle
+        path: ${{ inputs.bundle }}
+        if-no-files-found: error
+
+    - name: Upload SARIF to code scanning
+      if: inputs.sarif != ''
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: ${{ inputs.sarif }}
+
+    - name: Fail on new affected findings
+      if: inputs.fail-on-findings == 'true'
+      shell: bash
+      env:
+        DUMPSCAN_AFFECTED: ${{ steps.scan.outputs.affected }}
+        DUMPSCAN_BUNDLE: ${{ inputs.bundle }}
+      run: ${{ github.action_path }}/scripts/gate.sh
