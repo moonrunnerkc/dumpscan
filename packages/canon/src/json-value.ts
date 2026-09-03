@@ -27,19 +27,19 @@ export function parseJson(text: string): JsonValue {
 /**
  * Narrows a value to a JSON object.
  *
- * @param value - Any JSON value.
+ * @param value - Any JSON value, or undefined for a property that is absent.
  * @returns True when the value is a non-null, non-array object.
  */
-export function isJsonObject(value: JsonValue): value is JsonObject {
+export function isJsonObject(value: JsonValue | undefined): value is JsonObject {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
 /**
  * Narrows a value to a JSON array.
  *
- * @param value - Any JSON value.
+ * @param value - Any JSON value, or undefined for a property that is absent.
  * @returns True when the value is an array.
  */
-export function isJsonArray(value: JsonValue): value is JsonArray {
+export function isJsonArray(value: JsonValue | undefined): value is JsonArray {
   return Array.isArray(value);
 }

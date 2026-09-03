@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.6.0",
+  "id": "DUMPSCAN-PYPI-0001",
+  "modified": "2025-04-05T17:45:00Z",
+  "aliases": [
+    "CVE-2025-90003",
+    "PYSEC-2025-11"
+  ],
+  "summary": "Header smuggling in Sample_Client",
+  "severity": [
+    {
+      "type": "CVSS_V3",
+      "score": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+    }
+  ],
+  "affected": [
+    {
+      "package": {
+        "ecosystem": "PyPI",
+        "name": "Sample_Client"
+      },
+      "ranges": [
+        {
+          "type": "ECOSYSTEM",
+          "events": [
+            {
+              "introduced": "2.0"
+            },
+            {
+              "fixed": "2.31.0"
+            }
+          ]
+        }
+      ],
+      "ecosystem_specific": {
+        "affected_functions": [
+          "sample_client.send"
+        ]
+      }
+    }
+  ]
+}

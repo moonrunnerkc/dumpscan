@@ -20,6 +20,7 @@ describe('isJsonObject', () => {
     expect(isJsonObject(null)).toBe(false);
     expect(isJsonObject('x')).toBe(false);
     expect(isJsonObject(1)).toBe(false);
+    expect(isJsonObject(undefined)).toBe(false);
   });
 });
 
@@ -29,5 +30,6 @@ describe('isJsonArray', () => {
     expect(isJsonArray([1])).toBe(true);
     expect(isJsonArray({})).toBe(false);
     expect(isJsonArray(null)).toBe(false);
+    expect(isJsonArray(undefined)).toBe(false);
   });
 });

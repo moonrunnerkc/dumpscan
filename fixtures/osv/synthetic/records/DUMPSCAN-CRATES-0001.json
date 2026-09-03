@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.6.0",
+  "id": "DUMPSCAN-CRATES-0001",
+  "modified": "2025-06-01T08:15:00Z",
+  "aliases": [
+    "RUSTSEC-2025-0001"
+  ],
+  "summary": "Segfault on malformed input",
+  "affected": [
+    {
+      "package": {
+        "ecosystem": "crates.io",
+        "name": "sample_crate"
+      },
+      "ranges": [
+        {
+          "type": "SEMVER",
+          "events": [
+            {
+              "introduced": "0.1.0"
+            },
+            {
+              "fixed": "0.3.36"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

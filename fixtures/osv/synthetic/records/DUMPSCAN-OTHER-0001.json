@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.6.0",
+  "id": "DUMPSCAN-OTHER-0001",
+  "modified": "2025-09-02T00:00:00Z",
+  "summary": "An ecosystem dumpscan does not scan in v1, so the builder drops it",
+  "affected": [
+    {
+      "package": {
+        "ecosystem": "Debian:12",
+        "name": "libsample"
+      },
+      "ranges": [
+        {
+          "type": "ECOSYSTEM",
+          "events": [
+            {
+              "introduced": "0"
+            },
+            {
+              "fixed": "1.2.3-4"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

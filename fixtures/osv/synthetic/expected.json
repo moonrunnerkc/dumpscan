@@ -1,0 +1,14 @@
+{
+  "note": "Committed output of buildSnapshot over ./records. Any change to a record file, to canonicalization, or to the Merkle leaf encoding moves feedDigest, and the commit that moves it has to say which and why.",
+  "feedDigest": "sha256:77f3f14075127e4778d6ffb34cb7626604bb78784cc489c56b6a4e404010dd5b",
+  "manifestDigest": "sha256:bcef971432eedfbd5e6112b7848949cb1dc2b73f475454af6129825c8e5221b6",
+  "recordsWritten": 10,
+  "recordsSkipped": 1,
+  "ecosystemRecordCounts": {
+    "Go": 1,
+    "Maven": 1,
+    "PyPI": 3,
+    "crates.io": 1,
+    "npm": 5
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.6.0",
+  "id": "DUMPSCAN-NPM-0003",
+  "modified": "2025-02-20T10:30:00Z",
+  "withdrawn": "2025-02-19T08:00:00Z",
+  "summary": "Withdrawn after the maintainer disputed the report",
+  "affected": [
+    {
+      "package": {
+        "ecosystem": "npm",
+        "name": "cheeseparser"
+      },
+      "ranges": [
+        {
+          "type": "SEMVER",
+          "events": [
+            {
+              "introduced": "0"
+            },
+            {
+              "fixed": "99.0.0"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

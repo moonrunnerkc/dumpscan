@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.6.0",
+  "id": "DUMPSCAN-GO-0001",
+  "modified": "2025-07-19T13:00:00Z",
+  "aliases": [
+    "GO-2025-0001",
+    "CVE-2025-90004"
+  ],
+  "summary": "Request smuggling in a sample module",
+  "affected": [
+    {
+      "package": {
+        "ecosystem": "Go",
+        "name": "example.invalid/x/Net"
+      },
+      "ranges": [
+        {
+          "type": "SEMVER",
+          "events": [
+            {
+              "introduced": "0"
+            },
+            {
+              "fixed": "0.23.0"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

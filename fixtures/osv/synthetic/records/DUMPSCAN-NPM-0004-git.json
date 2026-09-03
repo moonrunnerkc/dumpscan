@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.6.0",
+  "id": "DUMPSCAN-NPM-0004",
+  "modified": "2025-01-30T00:00:00Z",
+  "summary": "Only a GIT range, which dumpscan does not evaluate in v1",
+  "affected": [
+    {
+      "package": {
+        "ecosystem": "npm",
+        "name": "gitonly"
+      },
+      "ranges": [
+        {
+          "type": "GIT",
+          "repo": "https://example.invalid/gitonly.git",
+          "events": [
+            {
+              "introduced": "0000000000000000000000000000000000000000"
+            },
+            {
+              "fixed": "1111111111111111111111111111111111111111"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

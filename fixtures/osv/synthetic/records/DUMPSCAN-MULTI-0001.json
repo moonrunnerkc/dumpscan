@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.6.0",
+  "id": "DUMPSCAN-MULTI-0001",
+  "modified": "2025-09-01T00:00:00Z",
+  "summary": "One record affecting two ecosystems",
+  "affected": [
+    {
+      "package": {
+        "ecosystem": "npm",
+        "name": "polyglot"
+      },
+      "ranges": [
+        {
+          "type": "SEMVER",
+          "events": [
+            {
+              "introduced": "0"
+            },
+            {
+              "fixed": "2.0.0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "package": {
+        "ecosystem": "PyPI",
+        "name": "polyglot"
+      },
+      "ranges": [
+        {
+          "type": "ECOSYSTEM",
+          "events": [
+            {
+              "introduced": "0"
+            },
+            {
+              "fixed": "2.0.0"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

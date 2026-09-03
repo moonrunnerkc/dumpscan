@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.6.0",
+  "id": "DUMPSCAN-PYPI-0002",
+  "modified": "2025-05-11T00:00:00Z",
+  "summary": "Explicit version list, no ranges",
+  "affected": [
+    {
+      "package": {
+        "ecosystem": "PyPI",
+        "name": "sample.client"
+      },
+      "versions": [
+        "1.0.0",
+        "1.0.1",
+        "1.1.0rc1"
+      ]
+    }
+  ]
+}

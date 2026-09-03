@@ -11,6 +11,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./download": {
+      "types": "./dist/download.d.ts",
+      "default": "./dist/download.js"
     }
   },
   "files": [
@@ -22,6 +26,7 @@
   },
   "dependencies": {
     "@dumpscan/canon": "workspace:*",
-    "@dumpscan/merkle": "workspace:*"
+    "@dumpscan/merkle": "workspace:*",
+    "fflate": "0.8.3"
   }
 }
