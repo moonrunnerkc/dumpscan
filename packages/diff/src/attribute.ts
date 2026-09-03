@@ -1,5 +1,6 @@
 import { canonicalJson, compareCodeUnits } from '@dumpscan/canon';
 import type { Digest, JsonObject } from '@dumpscan/canon';
+import { inputDigest } from '@dumpscan/lockfiles';
 import type { InputManifest, InputPackage } from '@dumpscan/lockfiles';
 import { findingToJson } from '@dumpscan/match';
 import type { Finding } from '@dumpscan/match';
@@ -68,7 +69,7 @@ export interface DiffResult {
  */
 export function diffScans(before: DiffInput, after: DiffInput): DiffResult {
   const digests = {
-    input: digestChange(inputKeyOf(before), inputKeyOf(after)),
+    input: digestChange(inputDigest(before.manifest), inputDigest(after.manifest)),
     feed: digestChange(before.predicate.feedDigest, after.predicate.feedDigest),
     comparator: digestChange(
       before.predicate.comparatorRulesetDigest,
@@ -241,12 +242,6 @@ function versionsOf(manifest: InputManifest, finding: Finding): string[] {
     .filter((pkg: InputPackage) => pkg.ecosystem === finding.ecosystem && pkg.name === finding.name)
     .map((pkg) => pkg.version)
     .sort(compareCodeUnits);
-}
-
-function inputKeyOf(scan: DiffInput): string {
-  return canonicalJson(
-    scan.manifest.packages.map((pkg) => `${pkg.ecosystem} ${pkg.name} ${pkg.version}`),
-  );
 }
 
 function digestChange(before: string | null, after: string | null): DigestChange {
