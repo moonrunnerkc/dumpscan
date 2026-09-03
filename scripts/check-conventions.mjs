@@ -8,6 +8,7 @@ const root = fileURLToPath(new URL('..', import.meta.url));
 const LINE_CAP = 300;
 const EM_DASH = String.fromCharCode(0x2014);
 const KEBAB = /^[a-z0-9]+(-[a-z0-9]+)*(\.[a-z0-9]+)*$/;
+const PATHNAME_ON_FILE_URL = /import\.meta\.url\s*\)\s*\.pathname/;
 const SKIP_DIRS = new Set(['node_modules', 'dist', 'coverage', 'reports', '.git', '.determinism']);
 const TEXT_EXT = /\.(ts|mjs|js|json|md|yml|yaml|txt|toml)$/;
 
@@ -49,10 +50,21 @@ for (const file of files) {
     if (!KEBAB.test(name)) {
       failures.push(`${rel}: filename is not kebab-case`);
     }
-    const lines = readFileSync(file, 'utf8').split('\n').length;
+    const source = readFileSync(file, 'utf8');
+    const lines = source.split('\n').length;
     if (lines > LINE_CAP) {
       failures.push(
         `${rel}: ${lines} lines exceeds the ${LINE_CAP} line cap; split along a natural seam`,
+      );
+    }
+    // On Windows a file URL's pathname is /D:/a/repo, which join turns into
+    // D:\\D:\\a\\repo. Every fixture read in this repository went through that
+    // once already.
+    const badPath = PATHNAME_ON_FILE_URL.exec(source);
+    if (badPath !== null) {
+      const line = source.slice(0, badPath.index).split('\n').length;
+      failures.push(
+        `${rel}:${line}: reads .pathname off an import.meta.url URL, which is not a path on Windows; use fileURLToPath from node:url`,
       );
     }
   }
