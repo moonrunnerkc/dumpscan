@@ -25,6 +25,7 @@ dumpscan scan <lockfile> --snapshot <digest|path> [options]
   --workspace <path>        Which resolved package set to scan. Defaults to '.'.
   --out <path>              Bundle to write. Defaults to dumpscan.bundle.json.
   --findings <path>         Also write the findings on their own.
+  --sarif <path>            Also write SARIF 2.1.0 for code scanning.
   --sign                    Sign keylessly with Sigstore.
   --identity-token <jwt>    OIDC token for keyless signing.
   --exclusions <path>       dumpscan.exclusions.json or an OpenVEX document.

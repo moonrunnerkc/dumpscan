@@ -24,6 +24,7 @@ import { flag, requireOption } from './args.js';
 import type { ParsedArgs } from './args.js';
 import { EXIT_FINDINGS, EXIT_OK, UsageError } from './exit.js';
 import type { CommandOutput } from './output.js';
+import { toSarif } from './sarif.js';
 import { resolveSnapshotWithStores, storesFrom } from './snapshot-resolver.js';
 
 /**
@@ -113,6 +114,19 @@ export async function runScan(args: ParsedArgs): Promise<CommandOutput> {
     write(findingsPath, canonicalBytes(result.findings.map(findingToJson)));
   }
 
+  const sarifPath = args.options.get('sarif');
+  if (sarifPath !== undefined && sarifPath !== '') {
+    const sarif = toSarif({
+      findings: result.findings,
+      predicate,
+      inputDigest: inputDigest(manifest),
+      lockfile: lockfilePath,
+    });
+    // SARIF is read by GitHub rather than hashed, so it is written indented
+    // rather than canonically. Nothing signs it and nothing replays it.
+    write(sarifPath, new TextEncoder().encode(`${JSON.stringify(sarif, null, 2)}\n`));
+  }
+
   const affected = result.findings.filter((finding) => finding.status === 'affected');
   return {
     exitCode: affected.length > 0 ? EXIT_FINDINGS : EXIT_OK,
@@ -127,6 +141,7 @@ export async function runScan(args: ParsedArgs): Promise<CommandOutput> {
       `findings      ${String(result.findings.length)} total, ${String(affected.length)} affected`,
       `findingsRoot  ${predicate.findingsRoot}`,
       `bundle        ${out}`,
+      ...(sarifPath === undefined || sarifPath === '' ? [] : [`sarif         ${sarifPath}`]),
     ],
     json: {
       format: parsed.format,

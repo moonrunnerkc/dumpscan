@@ -17,6 +17,7 @@ args=(scan "$DUMPSCAN_LOCKFILE" --snapshot "$DUMPSCAN_SNAPSHOT" --out "$DUMPSCAN
 [[ -n "${DUMPSCAN_WORKSPACE:-}" ]] && args+=(--workspace "$DUMPSCAN_WORKSPACE")
 [[ -n "${DUMPSCAN_EXCLUSIONS:-}" ]] && args+=(--exclusions "$DUMPSCAN_EXCLUSIONS")
 [[ "${DUMPSCAN_SIGN:-true}" == "true" ]] && args+=(--sign)
+[[ -n "${DUMPSCAN_SARIF:-}" ]] && args+=(--sarif "$DUMPSCAN_SARIF")
 
 # Exit 1 means findings are present, which is a result rather than a failure.
 # The gate step decides whether findings should fail the check.
@@ -51,6 +52,3 @@ affected=$(node -e 'const r=JSON.parse(require("node:fs").readFileSync("dumpscan
   echo "| affected | $affected |"
 } >> "$GITHUB_STEP_SUMMARY"
 
-if [[ -n "${DUMPSCAN_SARIF:-}" ]]; then
-  node "$(dirname "${BASH_SOURCE[0]}")/to-sarif.mjs" dumpscan-scan.json "$DUMPSCAN_SARIF"
-fi
