@@ -15,7 +15,7 @@ import type { Finding } from './finding.js';
  * Bump it whenever matching semantics change, even when no public API does.
  * `scripts/check-conventions.mjs` fails if it drifts from the package version.
  */
-export const MATCHER_VERSION = '0.1.0';
+export const MATCHER_VERSION = '1.0.0';
 
 export interface MatchOptions {
   /** Exclusions to apply. Expired ones are dropped before matching. */

@@ -9,7 +9,7 @@
       "lockfile": "Cargo.lock",
       "workspaceRoot": ".",
       "inputDigest": "sha256:3d631c83a2ea20b1d6c5ddee883b91432b6a726c2736dbea442945806bf4ef18",
-      "matcherVersion": "0.1.0",
+      "matcherVersion": "1.0.0",
       "findingsRoot": "sha256:5995b83127c39fb90a823c9c53905b71c3d3b496749698773e35317f26397e51",
       "findingsCount": 2,
       "ecosystems": [
@@ -94,7 +94,7 @@
       "lockfile": "go.sum",
       "workspaceRoot": ".",
       "inputDigest": "sha256:a98549b2e96faf8dae896aca3f7cbbb263998edfee1f3d5ba209ad4447dca5a5",
-      "matcherVersion": "0.1.0",
+      "matcherVersion": "1.0.0",
       "findingsRoot": "sha256:30250f962ebbbc6a9118f8a8c0cf08102315b5cc8e7066601ead6647c5832dfe",
       "findingsCount": 2,
       "ecosystems": [
@@ -174,7 +174,7 @@
       "lockfile": "gradle.lockfile",
       "workspaceRoot": ".",
       "inputDigest": "sha256:76b2fc8bcb12e3e21b693a313e2c8beb2279d130420e7b94107d1bb6ad6960f2",
-      "matcherVersion": "0.1.0",
+      "matcherVersion": "1.0.0",
       "findingsRoot": "sha256:2264e367695c30140b1760cda1132b25326eae8353eccea9cbf4fca81ccb5341",
       "findingsCount": 1,
       "ecosystems": [

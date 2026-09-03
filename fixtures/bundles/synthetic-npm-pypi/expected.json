@@ -9,7 +9,7 @@
       "lockfile": "package-lock.json",
       "workspaceRoot": ".",
       "inputDigest": "sha256:725b0669df04cc8794f098f0a163dfe8554f9188e3b2e4073bd6b5c348fb6b69",
-      "matcherVersion": "0.1.0",
+      "matcherVersion": "1.0.0",
       "findingsRoot": "sha256:fe78864f47561ca3a8c4cd83d6a24b1991a86100d9c3a42d5e17032dfc87d924",
       "findingsCount": 5,
       "ecosystems": [
@@ -177,7 +177,7 @@
       "lockfile": "requirements.txt",
       "workspaceRoot": ".",
       "inputDigest": "sha256:5ab7a55e49ed377d182dfd1706b13f4f5a963d2cb4a4d668fe2126bf950ef849",
-      "matcherVersion": "0.1.0",
+      "matcherVersion": "1.0.0",
       "findingsRoot": "sha256:c92de6e4671078cc7ad1b90d61c58977093b7edb042a7db374bf448b6f681836",
       "findingsCount": 3,
       "ecosystems": [

@@ -61,7 +61,7 @@ export async function run(argv: readonly string[], out: Writer, err: Writer): Pr
 }
 
 /** Version of the dumpscan CLI. Kept in step with package.json by pnpm lint. */
-export const VERSION = '0.1.0';
+export const VERSION = '1.0.0';
 
 async function dispatch(command: string, args: ParsedArgs): Promise<CommandOutput> {
   switch (command) {
