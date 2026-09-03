@@ -1,0 +1,4 @@
+{
+  "lockfile": "requirements.txt",
+  "refused": "requirements.txt: requirements.txt line 2 is \"polyglot>=1.9.0\", which does not pin an exact version; dumpscan reads a requirements file only when every line uses == so the scan is reproducible"
+}

@@ -1,0 +1,91 @@
+{
+  "lockfile": "pnpm-lock.yaml",
+  "format": "pnpm-lock.yaml v9.0",
+  "manifests": [
+    {
+      "inputDigest": "sha256:53a524d4b5c14f22af5d09a618a2691bdd21a068edee8b1deb7fcdf299d42659",
+      "manifest": {
+        "manifestVersion": "dumpscan.input/v1",
+        "format": "pnpm-lock.yaml v9.0",
+        "lockfileDigest": "sha256:eec1a94651296bf82aa04173ac6856f68c3201d402c24824f092efb2739356e0",
+        "workspaceRoot": ".",
+        "overApproximated": false,
+        "packages": [
+          {
+            "ecosystem": "npm",
+            "name": "@Sample/Widget-Dep",
+            "version": "1.4.7",
+            "purl": "pkg:npm/%40sample/widget-dep@1.4.7"
+          },
+          {
+            "ecosystem": "npm",
+            "name": "cheeseparser",
+            "version": "4.17.20",
+            "purl": "pkg:npm/cheeseparser@4.17.20"
+          },
+          {
+            "ecosystem": "npm",
+            "name": "polyglot",
+            "version": "1.9.0",
+            "purl": "pkg:npm/polyglot@1.9.0"
+          },
+          {
+            "ecosystem": "npm",
+            "name": "tiny-helper",
+            "version": "0.4.2",
+            "purl": "pkg:npm/tiny-helper@0.4.2"
+          }
+        ],
+        "unresolved": [
+          "gitonly"
+        ]
+      }
+    },
+    {
+      "inputDigest": "sha256:0aa186d70f8aaaec2438ee8a80cba32c0159458e2fb3eab151964cfc73a4ae1c",
+      "manifest": {
+        "manifestVersion": "dumpscan.input/v1",
+        "format": "pnpm-lock.yaml v9.0",
+        "lockfileDigest": "sha256:eec1a94651296bf82aa04173ac6856f68c3201d402c24824f092efb2739356e0",
+        "workspaceRoot": "packages/api",
+        "overApproximated": false,
+        "packages": [
+          {
+            "ecosystem": "npm",
+            "name": "polyglot",
+            "version": "1.9.0",
+            "purl": "pkg:npm/polyglot@1.9.0"
+          },
+          {
+            "ecosystem": "npm",
+            "name": "tiny-helper",
+            "version": "0.4.2",
+            "purl": "pkg:npm/tiny-helper@0.4.2"
+          }
+        ],
+        "unresolved": [
+          "gitonly"
+        ]
+      }
+    },
+    {
+      "inputDigest": "sha256:4a98cd50885ed41c2d45cea71d2ad2e1524788998aaafce5bc547bf45338a9ff",
+      "manifest": {
+        "manifestVersion": "dumpscan.input/v1",
+        "format": "pnpm-lock.yaml v9.0",
+        "lockfileDigest": "sha256:eec1a94651296bf82aa04173ac6856f68c3201d402c24824f092efb2739356e0",
+        "workspaceRoot": "packages/widget",
+        "overApproximated": false,
+        "packages": [
+          {
+            "ecosystem": "npm",
+            "name": "@Sample/Widget-Dep",
+            "version": "1.4.7",
+            "purl": "pkg:npm/%40sample/widget-dep@1.4.7"
+          }
+        ],
+        "unresolved": []
+      }
+    }
+  ]
+}

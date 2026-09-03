@@ -1,0 +1,26 @@
+lockfileVersion: '6.0'
+
+dependencies:
+  cheeseparser:
+    specifier: ^4.17.0
+    version: 4.17.21
+
+importers:
+
+  .:
+    dependencies:
+      cheeseparser:
+        specifier: ^4.17.0
+        version: 4.17.21
+
+packages:
+
+  /cheeseparser@4.17.21:
+    resolution: {integrity: sha512-AAA}
+    dependencies:
+      tiny-helper: 0.4.2
+    dev: false
+
+  /tiny-helper@0.4.2:
+    resolution: {integrity: sha512-BBB}
+    dev: false

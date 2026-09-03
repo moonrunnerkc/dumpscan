@@ -1,0 +1,47 @@
+{
+  "_meta": {
+    "hash": {
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "pipfile-spec": 6,
+    "requires": {
+      "python_version": "3.11"
+    },
+    "sources": [
+      {
+        "name": "pypi",
+        "url": "https://pypi.org/simple",
+        "verify_ssl": true
+      }
+    ]
+  },
+  "default": {
+    "sample-client": {
+      "hashes": [
+        "sha256:aaa"
+      ],
+      "version": "==2.30.0"
+    },
+    "Polyglot": {
+      "hashes": [
+        "sha256:bbb"
+      ],
+      "version": "==1.9.0"
+    },
+    "vcs-thing": {
+      "git": "https://example.invalid/vcs.git",
+      "ref": "abc123"
+    }
+  },
+  "develop": {
+    "sample.client": {
+      "hashes": [
+        "sha256:ccc"
+      ],
+      "version": "==2.30.0"
+    },
+    "pinned-star": {
+      "version": "==1.*"
+    }
+  }
+}

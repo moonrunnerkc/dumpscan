@@ -1,0 +1,31 @@
+{
+  "lockfile": "pnpm-lock.yaml",
+  "format": "pnpm-lock.yaml v6.0",
+  "manifests": [
+    {
+      "inputDigest": "sha256:6962e280214de0abb91fe202f681b79bdddf9b62f51a977c4034c45e1bce1027",
+      "manifest": {
+        "manifestVersion": "dumpscan.input/v1",
+        "format": "pnpm-lock.yaml v6.0",
+        "lockfileDigest": "sha256:7cdc191f37d7452528f249209757e4c724e2dd42964c3d251a18126c61d30ff0",
+        "workspaceRoot": ".",
+        "overApproximated": false,
+        "packages": [
+          {
+            "ecosystem": "npm",
+            "name": "cheeseparser",
+            "version": "4.17.21",
+            "purl": "pkg:npm/cheeseparser@4.17.21"
+          },
+          {
+            "ecosystem": "npm",
+            "name": "tiny-helper",
+            "version": "0.4.2",
+            "purl": "pkg:npm/tiny-helper@0.4.2"
+          }
+        ],
+        "unresolved": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+# Resolved with uv pip compile
+Sample_Client==2.30.0 \
+    --hash=sha256:aaaaaaaa
+polyglot[extra]==1.9.0
+tiny.helper==0.4.2 ; python_version >= "3.11"
+
+# trailing comment

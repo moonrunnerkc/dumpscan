@@ -1,0 +1,51 @@
+version = 1
+requires-python = ">=3.11"
+
+[manifest]
+members = [
+    "sample-api",
+    "sample-web",
+]
+
+[[package]]
+name = "sample-api"
+version = "0.1.0"
+source = { editable = "packages/api" }
+dependencies = [
+    { name = "sample-client" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "sample-client", specifier = ">=2.30" }]
+
+[[package]]
+name = "sample-web"
+version = "0.1.0"
+source = { virtual = "packages/web" }
+dependencies = [
+    { name = "polyglot" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "polyglot", specifier = ">=1.9" }]
+
+[[package]]
+name = "sample-client"
+version = "2.30.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "tiny-helper" },
+]
+sdist = { url = "https://files.example.invalid/sample_client-2.30.0.tar.gz", hash = "sha256:aaa" }
+
+[[package]]
+name = "polyglot"
+version = "1.9.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.example.invalid/polyglot-1.9.0.tar.gz", hash = "sha256:bbb" }
+
+[[package]]
+name = "tiny-helper"
+version = "0.4.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.example.invalid/tiny_helper-0.4.2.tar.gz", hash = "sha256:ccc" }

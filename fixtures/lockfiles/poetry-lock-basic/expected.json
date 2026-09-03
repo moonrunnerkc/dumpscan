@@ -1,0 +1,33 @@
+{
+  "lockfile": "poetry.lock",
+  "format": "poetry.lock v2.0",
+  "manifests": [
+    {
+      "inputDigest": "sha256:6c08a15eca4895b938585defd6ce1ab2df04fbabc4876a85634eba2ee276e9f9",
+      "manifest": {
+        "manifestVersion": "dumpscan.input/v1",
+        "format": "poetry.lock v2.0",
+        "lockfileDigest": "sha256:9013f633fe93f8f17a3a457a7a272a88ae952e225e2b9c9d1af8991ad8e1e2b1",
+        "workspaceRoot": ".",
+        "overApproximated": false,
+        "packages": [
+          {
+            "ecosystem": "PyPI",
+            "name": "Sample_Client",
+            "version": "2.30.0",
+            "purl": "pkg:pypi/sample-client@2.30.0"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "polyglot",
+            "version": "1.9.0",
+            "purl": "pkg:pypi/polyglot@1.9.0"
+          }
+        ],
+        "unresolved": [
+          "vendored-thing"
+        ]
+      }
+    }
+  ]
+}

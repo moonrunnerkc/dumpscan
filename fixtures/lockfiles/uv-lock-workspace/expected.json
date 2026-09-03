@@ -1,0 +1,81 @@
+{
+  "lockfile": "uv.lock",
+  "format": "uv.lock v1",
+  "manifests": [
+    {
+      "inputDigest": "sha256:7a5c87085b085a66d99523ab082ae27302ec938ce499a746180b04fa1238a322",
+      "manifest": {
+        "manifestVersion": "dumpscan.input/v1",
+        "format": "uv.lock v1",
+        "lockfileDigest": "sha256:fa98505567bbcf7c006b937830f50e945392a8abd303df00a99869b58bba93a2",
+        "workspaceRoot": ".",
+        "overApproximated": false,
+        "packages": [
+          {
+            "ecosystem": "PyPI",
+            "name": "polyglot",
+            "version": "1.9.0",
+            "purl": "pkg:pypi/polyglot@1.9.0"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "sample-client",
+            "version": "2.30.0",
+            "purl": "pkg:pypi/sample-client@2.30.0"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "tiny-helper",
+            "version": "0.4.2",
+            "purl": "pkg:pypi/tiny-helper@0.4.2"
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "inputDigest": "sha256:ae530188c107b253f0c337061ea5b64e15bd586924562879ce937f67ac45cd19",
+      "manifest": {
+        "manifestVersion": "dumpscan.input/v1",
+        "format": "uv.lock v1",
+        "lockfileDigest": "sha256:fa98505567bbcf7c006b937830f50e945392a8abd303df00a99869b58bba93a2",
+        "workspaceRoot": "sample-api",
+        "overApproximated": false,
+        "packages": [
+          {
+            "ecosystem": "PyPI",
+            "name": "sample-client",
+            "version": "2.30.0",
+            "purl": "pkg:pypi/sample-client@2.30.0"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "tiny-helper",
+            "version": "0.4.2",
+            "purl": "pkg:pypi/tiny-helper@0.4.2"
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "inputDigest": "sha256:91046c39d21c72c67f9afbc3faee7c43efc6139340eaa5576befd2ef1e8c041c",
+      "manifest": {
+        "manifestVersion": "dumpscan.input/v1",
+        "format": "uv.lock v1",
+        "lockfileDigest": "sha256:fa98505567bbcf7c006b937830f50e945392a8abd303df00a99869b58bba93a2",
+        "workspaceRoot": "sample-web",
+        "overApproximated": false,
+        "packages": [
+          {
+            "ecosystem": "PyPI",
+            "name": "polyglot",
+            "version": "1.9.0",
+            "purl": "pkg:pypi/polyglot@1.9.0"
+          }
+        ],
+        "unresolved": []
+      }
+    }
+  ]
+}

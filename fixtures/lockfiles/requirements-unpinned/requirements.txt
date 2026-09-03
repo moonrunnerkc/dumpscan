@@ -1,0 +1,2 @@
+sample-client==2.30.0
+polyglot>=1.9.0

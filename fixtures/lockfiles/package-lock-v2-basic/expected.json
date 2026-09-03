@@ -1,0 +1,31 @@
+{
+  "lockfile": "package-lock.json",
+  "format": "package-lock.json v2",
+  "manifests": [
+    {
+      "inputDigest": "sha256:7d04e88da1df16cbfaa55a1c44e3c8497b2f44af25534807f6e125617b09f588",
+      "manifest": {
+        "manifestVersion": "dumpscan.input/v1",
+        "format": "package-lock.json v2",
+        "lockfileDigest": "sha256:ece4f2bbe82a1534e2e09f278a658c0e0bd72d3d36341d76438ca08c516c4797",
+        "workspaceRoot": ".",
+        "overApproximated": false,
+        "packages": [
+          {
+            "ecosystem": "npm",
+            "name": "cheeseparser",
+            "version": "4.17.21",
+            "purl": "pkg:npm/cheeseparser@4.17.21"
+          },
+          {
+            "ecosystem": "npm",
+            "name": "polyglot",
+            "version": "1.0.0",
+            "purl": "pkg:npm/polyglot@1.0.0"
+          }
+        ],
+        "unresolved": []
+      }
+    }
+  ]
+}

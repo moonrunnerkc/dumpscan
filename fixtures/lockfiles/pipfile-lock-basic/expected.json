@@ -1,0 +1,40 @@
+{
+  "lockfile": "Pipfile.lock",
+  "format": "Pipfile.lock spec 6",
+  "manifests": [
+    {
+      "inputDigest": "sha256:216c27da6236b47b9cff18d2da66b768290e35715b28aa497dec66366ff69f7d",
+      "manifest": {
+        "manifestVersion": "dumpscan.input/v1",
+        "format": "Pipfile.lock spec 6",
+        "lockfileDigest": "sha256:9e91aec3ffc839431765f0559127e0bb0c509a1d1ae917c12c3b35a235912655",
+        "workspaceRoot": ".",
+        "overApproximated": false,
+        "packages": [
+          {
+            "ecosystem": "PyPI",
+            "name": "Polyglot",
+            "version": "1.9.0",
+            "purl": "pkg:pypi/polyglot@1.9.0"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "sample-client",
+            "version": "2.30.0",
+            "purl": "pkg:pypi/sample-client@2.30.0"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "sample.client",
+            "version": "2.30.0",
+            "purl": "pkg:pypi/sample-client@2.30.0"
+          }
+        ],
+        "unresolved": [
+          "pinned-star",
+          "vcs-thing"
+        ]
+      }
+    }
+  ]
+}

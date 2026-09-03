@@ -1,0 +1,37 @@
+{
+  "lockfile": "yarn.lock",
+  "format": "yarn.lock berry v8",
+  "manifests": [
+    {
+      "inputDigest": "sha256:dbf1d91d2321c4544e8521e9aed41003547f76e34c5cd907aac2eb1e14069c7b",
+      "manifest": {
+        "manifestVersion": "dumpscan.input/v1",
+        "format": "yarn.lock berry v8",
+        "lockfileDigest": "sha256:fc1b17e7a66b790185a1c01db923cd624668322db39f87e2399c461b12e3d276",
+        "workspaceRoot": ".",
+        "overApproximated": false,
+        "packages": [
+          {
+            "ecosystem": "npm",
+            "name": "@Sample/Widget-Dep",
+            "version": "1.4.7",
+            "purl": "pkg:npm/%40sample/widget-dep@1.4.7"
+          },
+          {
+            "ecosystem": "npm",
+            "name": "cheeseparser",
+            "version": "4.17.20",
+            "purl": "pkg:npm/cheeseparser@4.17.20"
+          },
+          {
+            "ecosystem": "npm",
+            "name": "polyglot",
+            "version": "1.9.0",
+            "purl": "pkg:npm/polyglot@1.9.0"
+          }
+        ],
+        "unresolved": []
+      }
+    }
+  ]
+}

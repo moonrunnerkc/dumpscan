@@ -21,6 +21,9 @@
     "provenance": true
   },
   "dependencies": {
-    "@dumpscan/canon": "workspace:*"
+    "@dumpscan/canon": "workspace:*",
+    "@dumpscan/osv": "workspace:*",
+    "smol-toml": "1.8.0",
+    "yaml": "2.9.0"
   }
 }

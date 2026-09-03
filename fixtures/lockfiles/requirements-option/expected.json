@@ -1,0 +1,4 @@
+{
+  "lockfile": "requirements.txt",
+  "refused": "requirements.txt: requirements.txt line 1 is \"-r base.txt\"; dumpscan does not follow options or included files, so pass the resolved requirements file produced by pip-compile or uv pip compile"
+}

@@ -1,0 +1,37 @@
+{
+  "lockfile": "yarn.lock",
+  "format": "yarn.lock classic v1",
+  "manifests": [
+    {
+      "inputDigest": "sha256:0e59004665b46e0bc4b95be0bbff88e3b72e4cc6f01427fca9ed9fc34e6be995",
+      "manifest": {
+        "manifestVersion": "dumpscan.input/v1",
+        "format": "yarn.lock classic v1",
+        "lockfileDigest": "sha256:040896e00b03a98efe2fcd46bb344f6bd637d445cb4bd5fca9dbd271ea3f6a3a",
+        "workspaceRoot": ".",
+        "overApproximated": false,
+        "packages": [
+          {
+            "ecosystem": "npm",
+            "name": "@Sample/Widget-Dep",
+            "version": "1.4.7",
+            "purl": "pkg:npm/%40sample/widget-dep@1.4.7"
+          },
+          {
+            "ecosystem": "npm",
+            "name": "cheeseparser",
+            "version": "4.17.20",
+            "purl": "pkg:npm/cheeseparser@4.17.20"
+          },
+          {
+            "ecosystem": "npm",
+            "name": "polyglot",
+            "version": "1.9.0",
+            "purl": "pkg:npm/polyglot@1.9.0"
+          }
+        ],
+        "unresolved": []
+      }
+    }
+  ]
+}

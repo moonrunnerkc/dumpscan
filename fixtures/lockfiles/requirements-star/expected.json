@@ -1,0 +1,4 @@
+{
+  "lockfile": "requirements.txt",
+  "refused": "requirements.txt: requirements.txt line 1 pins \"2.*\", which is a prefix match and not an exact version; write the full version instead"
+}

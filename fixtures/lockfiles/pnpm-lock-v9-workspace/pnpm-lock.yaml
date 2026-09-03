@@ -1,0 +1,58 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      cheeseparser:
+        specifier: ^4.17.0
+        version: 4.17.20
+
+  packages/api:
+    dependencies:
+      polyglot:
+        specifier: ^1.9.0
+        version: 1.9.0
+      '@sample/widget':
+        specifier: workspace:*
+        version: link:../widget
+    devDependencies:
+      gitonly:
+        specifier: github:example/gitonly
+        version: github.com/example/gitonly/abc123
+
+  packages/widget:
+    dependencies:
+      '@Sample/Widget-Dep':
+        specifier: ^1.4.0
+        version: 1.4.7
+
+packages:
+
+  cheeseparser@4.17.20:
+    resolution: {integrity: sha512-AAA}
+
+  polyglot@1.9.0:
+    resolution: {integrity: sha512-BBB}
+
+  '@Sample/Widget-Dep@1.4.7':
+    resolution: {integrity: sha512-CCC}
+
+  tiny-helper@0.4.2:
+    resolution: {integrity: sha512-DDD}
+
+snapshots:
+
+  cheeseparser@4.17.20: {}
+
+  polyglot@1.9.0:
+    dependencies:
+      tiny-helper: 0.4.2
+
+  '@Sample/Widget-Dep@1.4.7': {}
+
+  tiny-helper@0.4.2: {}

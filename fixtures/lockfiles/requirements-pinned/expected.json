@@ -1,0 +1,37 @@
+{
+  "lockfile": "requirements.txt",
+  "format": "requirements.txt pinned",
+  "manifests": [
+    {
+      "inputDigest": "sha256:27dfa7db88bd82a57299c727186441c34f55d91680ee1f0c821ba1d22d9d1906",
+      "manifest": {
+        "manifestVersion": "dumpscan.input/v1",
+        "format": "requirements.txt pinned",
+        "lockfileDigest": "sha256:09f3dcd0d635991c779a48f9ca595e1cb9d1063f39f2747c9d3784f7b04953e6",
+        "workspaceRoot": ".",
+        "overApproximated": false,
+        "packages": [
+          {
+            "ecosystem": "PyPI",
+            "name": "Sample_Client",
+            "version": "2.30.0",
+            "purl": "pkg:pypi/sample-client@2.30.0"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "polyglot",
+            "version": "1.9.0",
+            "purl": "pkg:pypi/polyglot@1.9.0"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "tiny.helper",
+            "version": "0.4.2",
+            "purl": "pkg:pypi/tiny-helper@0.4.2"
+          }
+        ],
+        "unresolved": []
+      }
+    }
+  ]
+}

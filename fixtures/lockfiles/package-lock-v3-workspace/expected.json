@@ -1,0 +1,40 @@
+{
+  "lockfile": "package-lock.json",
+  "format": "package-lock.json v3",
+  "manifests": [
+    {
+      "inputDigest": "sha256:20743d17d3c040a58143db59bd3d4ce0fdb42642f9acf9e32e27814cf46ed3c4",
+      "manifest": {
+        "manifestVersion": "dumpscan.input/v1",
+        "format": "package-lock.json v3",
+        "lockfileDigest": "sha256:5ee6e0a695447d1612581716c731325c4f6efd165ec01b2e0f9e17c9e7b95581",
+        "workspaceRoot": ".",
+        "overApproximated": false,
+        "packages": [
+          {
+            "ecosystem": "npm",
+            "name": "@Sample/Widget-Dep",
+            "version": "1.4.7",
+            "purl": "pkg:npm/%40sample/widget-dep@1.4.7"
+          },
+          {
+            "ecosystem": "npm",
+            "name": "cheeseparser",
+            "version": "4.17.20",
+            "purl": "pkg:npm/cheeseparser@4.17.20"
+          },
+          {
+            "ecosystem": "npm",
+            "name": "polyglot",
+            "version": "1.9.0",
+            "purl": "pkg:npm/polyglot@1.9.0"
+          }
+        ],
+        "unresolved": [
+          "gitonly",
+          "unversioned-thing"
+        ]
+      }
+    }
+  ]
+}
