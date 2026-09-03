@@ -12,3 +12,4 @@ One line per completed phase: date, commit, gate result.
 | 5 predicate, sign, verify, prove       | 2026-09-03 | fa0a834 | 550 tests green; end to end signs, verifies offline, and proves inclusion; keyless exercised in CI                        |
 | 6 Cargo, Go, Maven, exclusions, replay | 2026-09-03 | cb788cc | 687 tests green; both replay bundles reproduce their roots; match 93.78 percent and versions 93.83 percent mutation score |
 | 7 diff and the GitHub Action           | 2026-09-03 | ccf1f3a | 731 tests green; every attribution cause covered by a constructed bundle pair; action exercised in CI                     |
+| 8 snapshot publishing and explain | 2026-09-03 | a23d223 | 747 tests green; publish, fetch by digest from a store, and scan with an empty cache all covered end to end |
