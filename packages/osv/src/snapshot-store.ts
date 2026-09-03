@@ -9,7 +9,7 @@ import type { OsvAdvisory } from './advisory.js';
 import { isEcosystem } from './ecosystem.js';
 import type { Ecosystem } from './ecosystem.js';
 import { indexPath, MANIFEST_FILE, recordPath } from './snapshot-layout.js';
-import { parseManifest } from './snapshot-manifest.js';
+import { parseManifest, sortDigests } from './snapshot-manifest.js';
 import type { SnapshotManifest } from './snapshot-manifest.js';
 
 /**
@@ -28,6 +28,8 @@ export interface Snapshot extends AdvisorySource {
   readonly root: string;
   /** Digests of the advisories indexed under a package name, in tree order. */
   digestsFor(ecosystem: Ecosystem, normalizedName: string): readonly Digest[];
+  /** Every record digest in an ecosystem, in tree order. Needed to prove inclusion. */
+  recordDigests(ecosystem: Ecosystem): readonly Digest[];
   /** Reads and verifies one record by digest. */
   readAdvisory(recordDigest: Digest): OsvAdvisory;
 }
@@ -83,12 +85,21 @@ export function openSnapshot(root: string): Snapshot {
   const digestsFor = (ecosystem: Ecosystem, normalizedName: string): readonly Digest[] =>
     indexFor(ecosystem).get(normalizedName) ?? [];
 
+  const recordDigests = (ecosystem: Ecosystem): readonly Digest[] => {
+    const seen = new Set<Digest>();
+    for (const bucket of indexFor(ecosystem).values()) {
+      for (const value of bucket) seen.add(value);
+    }
+    return sortDigests([...seen]);
+  };
+
   return {
     manifest,
     feedDigest: manifest.feedDigest,
     root,
     ecosystems,
     digestsFor,
+    recordDigests,
     readAdvisory,
     advisoriesFor: (ecosystem, normalizedName) =>
       digestsFor(ecosystem, normalizedName).map(readAdvisory),

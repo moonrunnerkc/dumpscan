@@ -12,7 +12,16 @@
       "path": "../canon"
     },
     {
+      "path": "../lockfiles"
+    },
+    {
+      "path": "../match"
+    },
+    {
       "path": "../merkle"
+    },
+    {
+      "path": "../osv"
     },
     {
       "path": "../predicate"

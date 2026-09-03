@@ -22,7 +22,11 @@
   },
   "dependencies": {
     "@dumpscan/canon": "workspace:*",
+    "@dumpscan/lockfiles": "workspace:*",
+    "@dumpscan/match": "workspace:*",
     "@dumpscan/merkle": "workspace:*",
-    "@dumpscan/predicate": "workspace:*"
+    "@dumpscan/osv": "workspace:*",
+    "@dumpscan/predicate": "workspace:*",
+    "sigstore": "5.0.0"
   }
 }
