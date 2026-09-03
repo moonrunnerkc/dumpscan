@@ -1,0 +1,94 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  suite:
+    name: suite (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.34.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm typecheck
+
+      - run: pnpm lint
+
+      - run: pnpm build
+
+      - run: pnpm test
+
+      - run: pnpm test:determinism
+
+      - name: Emit corpus bytes
+        run: node scripts/emit-corpus.mjs corpus-out
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: corpus-${{ matrix.os }}
+          path: corpus-out
+          if-no-files-found: error
+
+  byte-identity:
+    name: byte identity across runners
+    needs: suite
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: corpus-*
+          path: corpora
+
+      - name: Diff findings bytes
+        run: >-
+          node scripts/compare-corpora.mjs
+          corpora/corpus-ubuntu-latest
+          corpora/corpus-macos-latest
+          corpora/corpus-windows-latest
+
+  coverage:
+    name: coverage and mutation floors
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.34.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm test:coverage
+
+      - run: pnpm test:mutation
