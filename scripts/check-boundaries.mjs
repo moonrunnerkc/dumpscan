@@ -55,19 +55,25 @@ for (const [dir, layer] of Object.entries(layers)) {
     for (const m of text.matchAll(IMPORT_RE)) {
       const spec = m[1];
       if (!spec.startsWith('@dumpscan/') && spec !== 'dumpscan') continue;
-      const depDir = byPackageName.get(spec);
+      // A subpath export such as @dumpscan/osv/download is the same package for
+      // layering purposes; the subpath only says which entry point it uses.
+      const parts = spec.split('/');
+      const packageName = spec.startsWith('@') ? parts.slice(0, 2).join('/') : (parts[0] ?? spec);
+      const depDir = byPackageName.get(packageName);
       if (depDir === undefined) {
-        failures.push(`${file.slice(root.length)} imports unknown workspace package ${spec}`);
+        failures.push(
+          `${file.slice(root.length)} imports unknown workspace package ${packageName}`,
+        );
         continue;
       }
-      if (!declared.has(spec)) {
+      if (!declared.has(packageName)) {
         failures.push(
-          `${file.slice(root.length)} imports ${spec} but packages/${dir}/package.json does not declare it`,
+          `${file.slice(root.length)} imports ${packageName} but packages/${dir}/package.json does not declare it`,
         );
       }
       if (layers[depDir] >= layer) {
         failures.push(
-          `${file.slice(root.length)} imports ${spec} (layer ${layers[depDir]}) from layer ${layer}; dependencies must point strictly downward`,
+          `${file.slice(root.length)} imports ${packageName} (layer ${layers[depDir]}) from layer ${layer}; dependencies must point strictly downward`,
         );
       }
     }

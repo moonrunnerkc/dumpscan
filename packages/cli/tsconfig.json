@@ -12,19 +12,22 @@
       "path": "../canon"
     },
     {
-      "path": "../merkle"
+      "path": "../diff"
     },
     {
-      "path": "../osv"
+      "path": "../explain"
     },
     {
       "path": "../lockfiles"
     },
     {
-      "path": "../versions"
+      "path": "../match"
     },
     {
-      "path": "../match"
+      "path": "../merkle"
+    },
+    {
+      "path": "../osv"
     },
     {
       "path": "../predicate"
@@ -33,10 +36,7 @@
       "path": "../sign"
     },
     {
-      "path": "../diff"
-    },
-    {
-      "path": "../explain"
+      "path": "../versions"
     }
   ]
 }

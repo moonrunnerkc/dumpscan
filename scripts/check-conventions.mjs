@@ -81,6 +81,19 @@ for (const file of files) {
   }
 }
 
+// The CLI reports its own version, so the constant and the published version
+// have to be the same string.
+{
+  const pkg = JSON.parse(readFileSync(join(root, 'packages/cli/package.json'), 'utf8'));
+  const index = readFileSync(join(root, 'packages/cli/src/index.ts'), 'utf8');
+  const declared = /VERSION = '([^']+)'/.exec(index)?.[1];
+  if (declared !== pkg.version) {
+    failures.push(
+      `packages/cli/src/index.ts declares VERSION ${declared} but packages/cli/package.json is ${pkg.version}; dumpscan --version would report a release that was never published`,
+    );
+  }
+}
+
 if (failures.length > 0) {
   console.error('Convention violations:');
   for (const f of failures.sort()) console.error(`  ${f}`);

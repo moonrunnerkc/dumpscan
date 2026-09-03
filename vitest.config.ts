@@ -11,9 +11,13 @@ const layers: Record<string, number> = JSON.parse(
  * Tests run against TypeScript source, never against dist, so coverage and
  * mutation reports point at the files a reviewer reads.
  */
-const alias = Object.fromEntries(
-  Object.keys(layers).map((pkg) => [`@dumpscan/${pkg}`, `${root}packages/${pkg}/src/index.ts`]),
-);
+const alias = {
+  // Subpath exports come first so the bare-name entry does not shadow them.
+  '@dumpscan/osv/download': `${root}packages/osv/src/download.ts`,
+  ...Object.fromEntries(
+    Object.keys(layers).map((pkg) => [`@dumpscan/${pkg}`, `${root}packages/${pkg}/src/index.ts`]),
+  ),
+};
 
 const FLOOR = { statements: 85, branches: 85, functions: 85, lines: 85 };
 const COMPLETE = { statements: 100, branches: 100, functions: 100, lines: 100 };

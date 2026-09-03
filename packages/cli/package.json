@@ -25,14 +25,14 @@
   },
   "dependencies": {
     "@dumpscan/canon": "workspace:*",
+    "@dumpscan/diff": "workspace:*",
+    "@dumpscan/explain": "workspace:*",
+    "@dumpscan/lockfiles": "workspace:*",
+    "@dumpscan/match": "workspace:*",
     "@dumpscan/merkle": "workspace:*",
     "@dumpscan/osv": "workspace:*",
-    "@dumpscan/lockfiles": "workspace:*",
-    "@dumpscan/versions": "workspace:*",
-    "@dumpscan/match": "workspace:*",
     "@dumpscan/predicate": "workspace:*",
     "@dumpscan/sign": "workspace:*",
-    "@dumpscan/diff": "workspace:*",
-    "@dumpscan/explain": "workspace:*"
+    "@dumpscan/versions": "workspace:*"
   }
 }

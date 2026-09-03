@@ -19,7 +19,8 @@
       "@dumpscan/sign": ["packages/sign/src/index.ts"],
       "@dumpscan/diff": ["packages/diff/src/index.ts"],
       "@dumpscan/explain": ["packages/explain/src/index.ts"],
-      "dumpscan": ["packages/cli/src/index.ts"]
+      "dumpscan": ["packages/cli/src/index.ts"],
+      "@dumpscan/osv/download": ["packages/osv/src/download.ts"]
     }
   },
   "include": ["packages/*/src/**/*.ts", "scripts/**/*.ts", "vitest.config.ts"]
