@@ -2,7 +2,20 @@
   "name": "@dumpscan/diff",
   "version": "1.0.0",
   "description": "Attribution of findings changes to exactly one of the four pinned digests.",
+  "keywords": [
+    "diff",
+    "attribution",
+    "vulnerability-scanner",
+    "reproducible"
+  ],
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moonrunnerkc/dumpscan.git",
+    "directory": "packages/diff"
+  },
+  "homepage": "https://github.com/moonrunnerkc/dumpscan#readme",
+  "bugs": "https://github.com/moonrunnerkc/dumpscan/issues",
   "type": "module",
   "engines": {
     "node": ">=22.22.2"

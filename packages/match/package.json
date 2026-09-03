@@ -2,7 +2,21 @@
   "name": "@dumpscan/match",
   "version": "1.0.0",
   "description": "The dumpscan matching engine. Pure functions only.",
+  "keywords": [
+    "vulnerability-matching",
+    "osv",
+    "version-ranges",
+    "openvex",
+    "vex"
+  ],
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moonrunnerkc/dumpscan.git",
+    "directory": "packages/match"
+  },
+  "homepage": "https://github.com/moonrunnerkc/dumpscan#readme",
+  "bugs": "https://github.com/moonrunnerkc/dumpscan/issues",
   "type": "module",
   "engines": {
     "node": ">=22.22.2"

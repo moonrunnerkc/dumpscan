@@ -2,7 +2,21 @@
   "name": "@dumpscan/predicate",
   "version": "1.0.0",
   "description": "in-toto Statement v1 construction and validation for dumpscan scan predicates.",
+  "keywords": [
+    "in-toto",
+    "attestation",
+    "predicate",
+    "json-schema",
+    "slsa"
+  ],
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moonrunnerkc/dumpscan.git",
+    "directory": "packages/predicate"
+  },
+  "homepage": "https://github.com/moonrunnerkc/dumpscan#readme",
+  "bugs": "https://github.com/moonrunnerkc/dumpscan/issues",
   "type": "module",
   "engines": {
     "node": ">=22.22.2"

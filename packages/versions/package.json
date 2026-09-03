@@ -2,7 +2,22 @@
   "name": "@dumpscan/versions",
   "version": "1.0.0",
   "description": "Per-ecosystem version comparators and the corpus that fixes their semantics.",
+  "keywords": [
+    "semver",
+    "pep440",
+    "maven",
+    "comparable-version",
+    "go-modules",
+    "version-comparison"
+  ],
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moonrunnerkc/dumpscan.git",
+    "directory": "packages/versions"
+  },
+  "homepage": "https://github.com/moonrunnerkc/dumpscan#readme",
+  "bugs": "https://github.com/moonrunnerkc/dumpscan/issues",
   "type": "module",
   "engines": {
     "node": ">=22.22.2"

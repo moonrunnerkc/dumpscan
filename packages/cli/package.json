@@ -2,7 +2,30 @@
   "name": "dumpscan",
   "version": "1.0.0",
   "description": "The dumpscan command line interface.",
+  "keywords": [
+    "vulnerability-scanner",
+    "supply-chain-security",
+    "sigstore",
+    "in-toto",
+    "attestation",
+    "provenance",
+    "osv",
+    "reproducible",
+    "sbom-alternative",
+    "sarif",
+    "dependency-scanning",
+    "devsecops",
+    "slsa",
+    "openvex"
+  ],
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moonrunnerkc/dumpscan.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://github.com/moonrunnerkc/dumpscan#readme",
+  "bugs": "https://github.com/moonrunnerkc/dumpscan/issues",
   "type": "module",
   "engines": {
     "node": ">=22.22.2"

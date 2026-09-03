@@ -2,7 +2,21 @@
   "name": "@dumpscan/osv",
   "version": "1.0.0",
   "description": "OSV schema types, content-addressed feed snapshots, and the advisory index.",
+  "keywords": [
+    "osv",
+    "vulnerability-database",
+    "advisories",
+    "snapshot",
+    "content-addressed"
+  ],
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moonrunnerkc/dumpscan.git",
+    "directory": "packages/osv"
+  },
+  "homepage": "https://github.com/moonrunnerkc/dumpscan#readme",
+  "bugs": "https://github.com/moonrunnerkc/dumpscan/issues",
   "type": "module",
   "engines": {
     "node": ">=22.22.2"

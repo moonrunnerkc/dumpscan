@@ -2,7 +2,23 @@
   "name": "@dumpscan/sign",
   "version": "1.0.0",
   "description": "DSSE envelopes, Sigstore bundles, offline verification, and inclusion proofs.",
+  "keywords": [
+    "sigstore",
+    "dsse",
+    "in-toto",
+    "keyless",
+    "rekor",
+    "fulcio",
+    "attestation"
+  ],
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moonrunnerkc/dumpscan.git",
+    "directory": "packages/sign"
+  },
+  "homepage": "https://github.com/moonrunnerkc/dumpscan#readme",
+  "bugs": "https://github.com/moonrunnerkc/dumpscan/issues",
   "type": "module",
   "engines": {
     "node": ">=22.22.2"

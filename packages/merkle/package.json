@@ -2,7 +2,22 @@
   "name": "@dumpscan/merkle",
   "version": "1.0.0",
   "description": "RFC 6962 Merkle tree with inclusion and consistency proofs.",
+  "keywords": [
+    "merkle-tree",
+    "rfc6962",
+    "inclusion-proof",
+    "consistency-proof",
+    "transparency-log",
+    "sha256"
+  ],
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moonrunnerkc/dumpscan.git",
+    "directory": "packages/merkle"
+  },
+  "homepage": "https://github.com/moonrunnerkc/dumpscan#readme",
+  "bugs": "https://github.com/moonrunnerkc/dumpscan/issues",
   "type": "module",
   "engines": {
     "node": ">=22.22.2"

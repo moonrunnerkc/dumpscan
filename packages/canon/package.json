@@ -2,7 +2,23 @@
   "name": "@dumpscan/canon",
   "version": "1.0.0",
   "description": "RFC 8785 JCS canonicalization, NFC normalization, and sha256 digest formatting.",
+  "keywords": [
+    "jcs",
+    "rfc8785",
+    "canonical-json",
+    "json-canonicalization",
+    "nfc",
+    "sha256",
+    "deterministic"
+  ],
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moonrunnerkc/dumpscan.git",
+    "directory": "packages/canon"
+  },
+  "homepage": "https://github.com/moonrunnerkc/dumpscan#readme",
+  "bugs": "https://github.com/moonrunnerkc/dumpscan/issues",
   "type": "module",
   "engines": {
     "node": ">=22.22.2"

@@ -2,7 +2,24 @@
   "name": "@dumpscan/lockfiles",
   "version": "1.0.0",
   "description": "Pure lockfile parsers producing canonical dumpscan input manifests.",
+  "keywords": [
+    "lockfile",
+    "package-lock",
+    "pnpm-lock",
+    "yarn-lock",
+    "poetry-lock",
+    "cargo-lock",
+    "go-sum",
+    "purl"
+  ],
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moonrunnerkc/dumpscan.git",
+    "directory": "packages/lockfiles"
+  },
+  "homepage": "https://github.com/moonrunnerkc/dumpscan#readme",
+  "bugs": "https://github.com/moonrunnerkc/dumpscan/issues",
   "type": "module",
   "engines": {
     "node": ">=22.22.2"

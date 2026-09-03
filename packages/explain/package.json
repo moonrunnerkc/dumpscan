@@ -2,7 +2,20 @@
   "name": "@dumpscan/explain",
   "version": "1.0.0",
   "description": "Alignment of Grype and Trivy output against a dumpscan scan.",
+  "keywords": [
+    "grype",
+    "trivy",
+    "scanner-divergence",
+    "diagnostics"
+  ],
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moonrunnerkc/dumpscan.git",
+    "directory": "packages/explain"
+  },
+  "homepage": "https://github.com/moonrunnerkc/dumpscan#readme",
+  "bugs": "https://github.com/moonrunnerkc/dumpscan/issues",
   "type": "module",
   "engines": {
     "node": ">=22.22.2"

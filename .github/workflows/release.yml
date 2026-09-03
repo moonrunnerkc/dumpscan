@@ -44,6 +44,12 @@ jobs:
       - name: publish
         run: |
           set -euo pipefail
+          if [[ -z "${NODE_AUTH_TOKEN:-}" ]]; then
+            echo "NPM_TOKEN is not set, so nothing was published." >&2
+            echo "The gate above still ran, so the tag is good. Add the NPM_TOKEN secret" >&2
+            echo "and re-run this workflow to publish the same commit." >&2
+            exit 0
+          fi
           for pkg in canon merkle osv versions lockfiles predicate match sign explain diff cli; do
             echo "publishing packages/$pkg"
             pnpm --filter "./packages/$pkg" publish --access public --no-git-checks
