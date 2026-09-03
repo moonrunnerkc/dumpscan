@@ -49,19 +49,17 @@ both depend on them. `merkle` produces and verifies them against the RFC 6962
 vectors, but neither the feed tree nor the findings tree is append-only, so there
 is no pair of trees a consistency proof would be sound between. ADR 0013.
 
-**The published snapshot workflow has never run.** `.github/workflows/snapshot.yml`
+**The published snapshot workflow has not run yet.** `.github/workflows/snapshot.yml`
 builds a snapshot from the real OSV archives daily, signs it, serves the release
 directory on localhost, and verifies the published bytes fetch and verify from a
-clean cache before uploading. Every step of that is covered by tests against a
-local store, and the download path is covered against a fixture server, but the
-workflow itself needs a GitHub repository to run in and there is not one yet.
+clean cache before uploading. Every step is covered by tests against a local
+store, and the download path against a fixture server, but the workflow itself
+has never executed. Its cron is `17 5 * * *`, so the first real run against OSV
+happens on its own schedule.
 
-**v1.0.0 is not published to npm.** The workspace is at 1.0.0 and
-`.github/workflows/release.yml` publishes on a version tag with provenance, but
-`scripts/check-release.mjs` fails today because no package declares a
-`repository` field. npm provenance needs one that matches the repository building
-the release, and the repository does not exist yet. Adding the field is the last
-step before a tag.
+**v1.0.0 is published to npm.** Resolved: every package declares a `repository`
+field and the release workflow published all eleven with provenance. See the
+Release section below.
 
 **The launch post uses this repository's fixtures, not a public project.** The
 guide asks for cross-scanner divergence reproduced on a public project's
@@ -96,3 +94,32 @@ reintroducing the bad code and watching the check fail.
 gated on all three suite legs, so it had never once run. The determinism
 guarantee is now demonstrated across Linux, macOS, and Windows rather than
 asserted.
+
+## Release
+
+v1.0.0 published to npm on 2026-09-03 from tag `v1.0.0` at 375d456, all eleven
+packages with SLSA provenance from the release workflow.
+
+The tag was first cut at d8b5b3c and moved to 375d456 once CI was green on every
+runner. Nothing had been published under the old tag, so it had no consumers.
+
+Four publish attempts failed before that with `404 Not Found - PUT
+@dumpscan%2fcanon`. The cause was not npm: `gh secret set --body` takes a
+literal value and reads stdin only when `--body` is omitted, so `--body -`
+stored the single character `-` as `NPM_TOKEN`. Every attempt was an anonymous
+PUT, and npm answers an unauthenticated request for a scoped package that does
+not exist with a 404 rather than a 401, which hid it. Two tokens were
+regenerated chasing a permissions theory that a failed org membership write
+appeared to support; that action is on npm's restricted list for granular
+tokens regardless of permissions, so it was never evidence.
+
+What found it was printing `npm whoami` before publishing, which came out empty.
+The release workflow now does that on every run and fails when the registry does
+not recognise the credential, rather than reporting an empty identity as
+success. The publish loop also skips versions already on the registry, so a run
+that dies partway can be re-run instead of failing on the first package.
+
+`keyless signing and verification` failed once on 509e3eb and passed on the
+commit before and after with no change to the signing path, so it is treated as
+a transient Sigstore outage. It reported only "Sigstore signing failed" because
+the CLI dropped `error.cause`; causes now print, so a repeat will say why.

@@ -49,7 +49,18 @@ jobs:
             echo "NPM_TOKEN is not set; skipping the publish below." >&2
             exit 0
           fi
-          echo "authenticated as: $(npm whoami)"
+          # Not $(npm whoami) inside an echo: a failure there is swallowed by
+          # command substitution, so the step passes while reporting nobody.
+          # That is exactly how a secret holding the literal string "-" reached
+          # four publish attempts before anyone noticed.
+          if ! whoami_output=$(npm whoami 2>&1); then
+            echo "npm does not recognise NPM_TOKEN: ${whoami_output}" >&2
+            echo "The secret is set but the registry rejected it. Check it holds the" >&2
+            echo "token itself: gh secret set NPM_TOKEN < token.txt, and note that" >&2
+            echo "gh secret set --body takes a literal value, not a - for stdin." >&2
+            exit 1
+          fi
+          echo "authenticated as: ${whoami_output}"
           echo "npm version: $(npm --version)"
           echo "reachable packages in the @dumpscan scope:"
           npm access list packages @dumpscan || echo "  (none, or the scope is not readable by this token)"
@@ -68,7 +79,16 @@ jobs:
             exit 0
           fi
           for pkg in canon merkle osv versions lockfiles predicate match sign explain diff cli; do
-            echo "publishing packages/$pkg"
+            name=$(node -p "require('./packages/$pkg/package.json').name")
+            version=$(node -p "require('./packages/$pkg/package.json').version")
+            # A publish that dies partway leaves the earlier packages on the
+            # registry. Without this, re-running the job fails on the first one
+            # instead of finishing the rest.
+            if npm view "$name@$version" version >/dev/null 2>&1; then
+              echo "skipping $name@$version, already on the registry"
+              continue
+            fi
+            echo "publishing $name@$version"
             pnpm --filter "./packages/$pkg" publish --access public --no-git-checks
           done
         env:
