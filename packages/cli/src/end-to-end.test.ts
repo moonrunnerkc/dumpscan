@@ -12,8 +12,9 @@ import { EXIT_FINDINGS, EXIT_OK, EXIT_USAGE } from './exit.js';
 import { run } from './index.js';
 
 const RECORDS = fileURLToPath(new URL('../../../fixtures/osv/synthetic/records', import.meta.url));
-const BUNDLE_FIXTURE = new URL('../../../fixtures/bundles/synthetic-npm-pypi', import.meta.url)
-  .pathname;
+const BUNDLE_FIXTURE = fileURLToPath(
+  new URL('../../../fixtures/bundles/synthetic-npm-pypi', import.meta.url),
+);
 
 let work = '';
 let snapshotDir = '';

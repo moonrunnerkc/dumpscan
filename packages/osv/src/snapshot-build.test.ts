@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import {
   mkdirSync,
   mkdtempSync,
@@ -15,8 +16,9 @@ import { describe, expect, it } from 'vitest';
 import { buildSnapshot } from './snapshot-build.js';
 import { MANIFEST_FILE, recordPath } from './snapshot-layout.js';
 
-const FIXTURE_RECORDS = new URL('../../../fixtures/osv/synthetic/records', import.meta.url)
-  .pathname;
+const FIXTURE_RECORDS = fileURLToPath(
+  new URL('../../../fixtures/osv/synthetic/records', import.meta.url),
+);
 const EXPECTED = JSON.parse(
   readFileSync(new URL('../../../fixtures/osv/synthetic/expected.json', import.meta.url), 'utf8'),
 ) as {
