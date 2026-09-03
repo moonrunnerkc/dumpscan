@@ -3,7 +3,12 @@
   "packageManager": "pnpm",
   "testRunner": "vitest",
   "vitest": { "configFile": "vitest.config.ts" },
-  "mutate": ["packages/versions/src/**/*.ts", "packages/match/src/**/*.ts", "!**/*.test.ts"],
+  "mutate": [
+    "packages/versions/src/**/*.ts",
+    "packages/match/src/**/*.ts",
+    "!**/*.test.ts",
+    "!**/*.fixture.ts"
+  ],
   "thresholds": { "high": 95, "low": 90, "break": 90 },
   "reporters": ["progress", "clear-text", "html"],
   "coverageAnalysis": "perTest",

@@ -16,22 +16,22 @@ const alias = Object.fromEntries(
 );
 
 const FLOOR = { statements: 85, branches: 85, functions: 85, lines: 85 };
+const COMPLETE = { statements: 100, branches: 100, functions: 100, lines: 100 };
 
 export const config = defineConfig({
   resolve: { alias },
   test: {
     include: ['packages/*/src/**/*.test.ts'],
-    passWithNoTests: true,
     environment: 'node',
     coverage: {
       provider: 'v8',
       reportsDirectory: 'coverage',
       reporter: ['text-summary', 'json', 'lcov'],
       include: ['packages/*/src/**/*.ts'],
-      exclude: ['**/*.test.ts'],
+      exclude: ['**/*.test.ts', '**/*.fixture.ts'],
       thresholds: {
-        'packages/canon/src/**': FLOOR,
-        'packages/merkle/src/**': FLOOR,
+        'packages/canon/src/**': COMPLETE,
+        'packages/merkle/src/**': COMPLETE,
         'packages/versions/src/**': FLOOR,
         'packages/match/src/**': FLOOR,
         'packages/predicate/src/**': FLOOR,

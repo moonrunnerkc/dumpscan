@@ -100,7 +100,10 @@ export const config = tseslint.config(
     files: ['**/*.ts'],
     extends: [tseslint.configs.strictTypeChecked, tseslint.configs.stylisticTypeChecked],
     languageOptions: {
-      parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname },
+      parserOptions: {
+        project: ['./tsconfig.typecheck.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
       globals: globals.node,
     },
     rules: {
@@ -119,10 +122,17 @@ export const config = tseslint.config(
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
       ],
-      '@typescript-eslint/switch-exhaustiveness-check': 'error',
+      '@typescript-eslint/switch-exhaustiveness-check': [
+        'error',
+        { considerDefaultExhaustiveForUnions: true },
+      ],
       '@typescript-eslint/restrict-template-expressions': ['error', { allowNumber: true }],
       eqeqeq: ['error', 'always'],
       'no-console': 'error',
+      // noUncheckedIndexedAccess makes every index read `T | undefined`. This rule
+      // wants a `!` there, which no-non-null-assertion forbids. Keep the ban on
+      // `!` and narrow index reads with an explicit `as T` instead.
+      '@typescript-eslint/non-nullable-type-assertion-style': 'off',
     },
   },
   {

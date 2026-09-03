@@ -27,6 +27,12 @@ for (const [dir, layer] of Object.entries(layers)) {
   const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'));
   const declared = new Set(Object.keys(pkg.dependencies ?? {}));
 
+  if (layer === 0 && declared.size > 0) {
+    failures.push(
+      `packages/${dir} must have zero dependencies; it is published for reuse and its bytes have to be auditable in one sitting`,
+    );
+  }
+
   for (const dep of declared) {
     const depDir = byPackageName.get(dep);
     if (depDir === undefined) continue;
