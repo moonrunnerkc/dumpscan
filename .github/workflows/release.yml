@@ -1,0 +1,53 @@
+name: release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # npm provenance
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.34.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - run: pnpm install --frozen-lockfile
+
+      # The tag is not a licence to skip the gate. A release that cannot pass
+      # the determinism run is not a release.
+      - run: pnpm typecheck
+      - run: pnpm lint
+      - run: pnpm build
+      - run: pnpm test
+      - run: pnpm test:determinism
+
+      - name: check the workspace is publishable at this tag
+        run: node scripts/check-release.mjs "${GITHUB_REF_NAME}"
+
+      # Published in dependency order so a consumer never resolves a version of
+      # dumpscan whose @dumpscan/* dependencies are not on the registry yet.
+      - name: publish
+        run: |
+          set -euo pipefail
+          for pkg in canon merkle osv versions lockfiles predicate match sign explain diff cli; do
+            echo "publishing packages/$pkg"
+            pnpm --filter "./packages/$pkg" publish --access public --no-git-checks
+          done
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: 'true'
