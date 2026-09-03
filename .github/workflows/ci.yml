@@ -44,6 +44,12 @@ jobs:
 
       - run: pnpm test:determinism
 
+      - name: Check generated files are current
+        run: >-
+          node scripts/generate-schema.mjs --check &&
+          node scripts/generate-lockfile-goldens.mjs --check &&
+          node scripts/generate-replay-bundles.mjs --check
+
       - name: Emit corpus bytes
         run: node scripts/emit-corpus.mjs corpus-out
 
@@ -71,6 +77,48 @@ jobs:
           corpora/corpus-ubuntu-latest
           corpora/corpus-macos-latest
           corpora/corpus-windows-latest
+
+  keyless:
+    name: keyless signing and verification
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.34.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm build
+
+      - name: Build a snapshot from the fixture records
+        run: node packages/cli/dist/bin.js snapshot --from fixtures/osv/synthetic/records --out snapshot
+
+      - name: Scan and sign with the workflow OIDC identity
+        run: >-
+          node packages/cli/dist/bin.js scan
+          fixtures/bundles/synthetic-npm-pypi/package-lock.json
+          --snapshot snapshot --sign --out keyless.bundle.json || test $? -eq 1
+
+      - name: Verify the signature against this workflow's identity
+        run: >-
+          node packages/cli/dist/bin.js verify keyless.bundle.json
+          --issuer https://token.actions.githubusercontent.com
+          --identity "https://github.com/${{ github.repository }}/.github/workflows/ci.yml@${{ github.ref }}"
+
+      - name: Prove a finding is in the signed set
+        run: >-
+          node packages/cli/dist/bin.js prove keyless.bundle.json DUMPSCAN-NPM-0001
+          --snapshot snapshot --json
 
   coverage:
     name: coverage and mutation floors
