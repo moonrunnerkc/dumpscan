@@ -10,6 +10,7 @@ const EM_DASH = String.fromCharCode(0x2014);
 const KEBAB = /^[a-z0-9]+(-[a-z0-9]+)*(\.[a-z0-9]+)*$/;
 const PATHNAME_ON_FILE_URL = /import\.meta\.url\s*\)\s*\.pathname/;
 const RUNTIME_REGEXP = /new RegExp\(/;
+const IMPORT_OF_PATH = /import\(\s*join\(/;
 const SKIP_DIRS = new Set(['node_modules', 'dist', 'coverage', 'reports', '.git', '.determinism']);
 const TEXT_EXT = /\.(ts|mjs|js|json|md|yml|yaml|txt|toml)$/;
 
@@ -66,6 +67,16 @@ for (const file of files) {
       const line = source.slice(0, badPath.index).split('\n').length;
       failures.push(
         `${rel}:${line}: reads .pathname off an import.meta.url URL, which is not a path on Windows; use fileURLToPath from node:url`,
+      );
+    }
+
+    // A dynamic import takes a URL. On Windows an absolute path begins with a
+    // drive letter, which the ESM loader reads as a URL scheme.
+    const importOfPath = IMPORT_OF_PATH.exec(source);
+    if (importOfPath !== null) {
+      const line = source.slice(0, importOfPath.index).split('\n').length;
+      failures.push(
+        `${rel}:${line}: imports a joined path, which is not a URL on Windows; wrap it in pathToFileURL from node:url`,
       );
     }
 
