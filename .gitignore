@@ -5,3 +5,8 @@ reports/
 *.tsbuildinfo
 .determinism/
 .dumpscan-cache/
+
+# Local secrets. Never commit these.
+.env
+.env.*
+!.env.example
