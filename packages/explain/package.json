@@ -24,6 +24,7 @@
     "@dumpscan/canon": "workspace:*",
     "@dumpscan/lockfiles": "workspace:*",
     "@dumpscan/match": "workspace:*",
+    "@dumpscan/osv": "workspace:*",
     "@dumpscan/predicate": "workspace:*"
   }
 }

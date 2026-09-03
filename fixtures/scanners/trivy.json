@@ -1,0 +1,40 @@
+{
+  "SchemaVersion": 2,
+  "ArtifactName": ".",
+  "ArtifactType": "filesystem",
+  "Results": [
+    {
+      "Target": "package-lock.json",
+      "Class": "lang-pkgs",
+      "Type": "npm",
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "GHSA-aaaa-bbbb-cccc",
+          "PkgName": "cheeseparser",
+          "InstalledVersion": "4.17.20",
+          "FixedVersion": "4.17.21",
+          "Severity": "HIGH",
+          "PkgIdentifier": {
+            "PURL": "pkg:npm/cheeseparser@4.17.20"
+          },
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory npm"
+          }
+        },
+        {
+          "VulnerabilityID": "CVE-2020-33333",
+          "PkgName": "tiny-helper",
+          "InstalledVersion": "0.4.2",
+          "Severity": "LOW",
+          "PkgIdentifier": {
+            "PURL": "pkg:npm/tiny-helper@0.4.2"
+          },
+          "DataSource": {
+            "ID": "ghsa"
+          }
+        }
+      ]
+    }
+  ]
+}
