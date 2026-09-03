@@ -4,6 +4,8 @@ import type { Ecosystem } from '@dumpscan/osv';
 
 import { ALL_CORPORA } from './corpus/all.js';
 import type { VersionCorpus } from './corpus-types.js';
+import { compareGoVersion, parseGoVersion } from './go-version.js';
+import { compareMavenVersion } from './maven-version.js';
 import { comparePep440, parsePep440 } from './pep440.js';
 import { compareSemver, parseSemver } from './semver.js';
 
@@ -34,13 +36,40 @@ const PEP440: Comparator = {
   compare: comparePep440,
 };
 
+/**
+ * Cargo versions are SemVer 2.0.0, so the ordering is the same code as npm's.
+ * The comparator is named separately because the corpus is per ecosystem: if
+ * crates.io ever diverges, the corpus is where that shows up first.
+ */
+const CARGO: Comparator = {
+  name: 'cargo',
+  accepts: (version) => parseSemver(version) !== null,
+  compare: compareSemver,
+};
+
+const GO: Comparator = {
+  name: 'go',
+  accepts: (version) => parseGoVersion(version) !== null,
+  compare: compareGoVersion,
+};
+
+/** Maven's ComparableVersion orders every string, so it accepts every string. */
+const MAVEN: Comparator = {
+  name: 'maven',
+  accepts: () => true,
+  compare: compareMavenVersion,
+};
+
 const BY_ECOSYSTEM: ReadonlyMap<Ecosystem, Comparator> = new Map([
   ['npm', SEMVER],
   ['PyPI', PEP440],
+  ['crates.io', CARGO],
+  ['Go', GO],
+  ['Maven', MAVEN],
 ]);
 
 const BY_NAME: ReadonlyMap<string, Comparator> = new Map(
-  [SEMVER, PEP440].map((comparator) => [comparator.name, comparator]),
+  [SEMVER, PEP440, CARGO, GO, MAVEN].map((comparator) => [comparator.name, comparator]),
 );
 
 /**
@@ -51,6 +80,29 @@ const BY_NAME: ReadonlyMap<string, Comparator> = new Map(
  */
 export function comparatorFor(ecosystem: Ecosystem): Comparator | undefined {
   return BY_ECOSYSTEM.get(ecosystem);
+}
+
+/**
+ * Returns the comparator that evaluates a range of a given type.
+ *
+ * A `SEMVER` range is evaluated with the semver comparator whatever ecosystem it
+ * appears in, because that is what the range type declares. Go is the exception:
+ * OSV strips the `v` from Go module versions and `go.sum` keeps it, so a Go
+ * SEMVER range is evaluated with the Go comparator, which reads both spellings
+ * and orders them identically.
+ *
+ * @param ecosystem - The ecosystem the package belongs to.
+ * @param rangeType - The OSV range type.
+ * @returns The comparator, or undefined when dumpscan does not evaluate that
+ * range type for that ecosystem.
+ */
+export function comparatorForRange(
+  ecosystem: Ecosystem,
+  rangeType: string,
+): Comparator | undefined {
+  if (rangeType === 'ECOSYSTEM') return comparatorFor(ecosystem);
+  if (rangeType !== 'SEMVER') return undefined;
+  return ecosystem === 'Go' ? GO : SEMVER;
 }
 
 /**

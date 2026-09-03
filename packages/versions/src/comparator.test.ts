@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   comparatorByName,
   comparatorFor,
+  comparatorForRange,
   corpora,
   corpusDocument,
   RULESET_VERSION,
@@ -15,18 +16,49 @@ function sign(value: number): number {
 }
 
 describe('comparatorFor', () => {
-  it('maps the ecosystems that have a comparator', () => {
+  it('maps every v1 ecosystem to its own comparator', () => {
     expect(comparatorFor('npm')?.name).toBe('semver');
     expect(comparatorFor('PyPI')?.name).toBe('pep440');
+    expect(comparatorFor('crates.io')?.name).toBe('cargo');
+    expect(comparatorFor('Go')?.name).toBe('go');
+    expect(comparatorFor('Maven')?.name).toBe('maven');
   });
 
-  it('returns undefined rather than a wrong comparator for an ecosystem with none', () => {
-    expect(comparatorFor('Go')).toBeUndefined();
+  it('gives every corpus a comparator and every comparator a corpus', () => {
+    const named = corpora().map((corpus) => corpus.comparator);
+    expect([...named].sort((a, b) => (a < b ? -1 : 1))).toStrictEqual([
+      'cargo',
+      'go',
+      'maven',
+      'pep440',
+      'semver',
+    ]);
   });
 
   it('resolves a comparator by the name a corpus records', () => {
     expect(comparatorByName('semver')?.name).toBe('semver');
     expect(comparatorByName('nope')).toBeUndefined();
+    for (const corpus of corpora()) {
+      expect(comparatorByName(corpus.comparator)?.name).toBe(corpus.comparator);
+    }
+  });
+
+  it('picks the comparator a range type calls for', () => {
+    expect(comparatorForRange('npm', 'SEMVER')?.name).toBe('semver');
+    expect(comparatorForRange('PyPI', 'SEMVER')?.name).toBe('semver');
+    expect(comparatorForRange('PyPI', 'ECOSYSTEM')?.name).toBe('pep440');
+    expect(comparatorForRange('crates.io', 'ECOSYSTEM')?.name).toBe('cargo');
+    expect(comparatorForRange('Maven', 'ECOSYSTEM')?.name).toBe('maven');
+  });
+
+  it('uses the Go comparator for a Go SEMVER range, because OSV drops the v', () => {
+    expect(comparatorForRange('Go', 'SEMVER')?.name).toBe('go');
+    expect(comparatorForRange('Go', 'ECOSYSTEM')?.name).toBe('go');
+  });
+
+  it('answers undefined for a range type dumpscan does not evaluate', () => {
+    expect(comparatorForRange('npm', 'GIT')).toBeUndefined();
+    expect(comparatorForRange('npm', 'FUTURE')).toBeUndefined();
   });
 });
 
@@ -123,27 +155,31 @@ describe.each(corpora().map((corpus) => [corpus.ecosystem, corpus] as const))(
       }
     });
 
+    // Comparing every triple by calling the comparator would parse each version
+    // once per comparison. The matrix is built once and the laws are checked
+    // against it, which is the same coverage at a thousandth of the work.
+    const all = [...corpus.ordered, ...corpus.equal.flat()];
+    const matrix = all.map((a) => all.map((b) => sign(comparator.compare(a, b))));
+
     it('is antisymmetric', () => {
-      const all = [...corpus.ordered, ...corpus.equal.flat()];
-      for (const a of all) {
-        for (const b of all) {
-          expect(sign(comparator.compare(a, b)) + sign(comparator.compare(b, a))).toBe(0);
+      for (let i = 0; i < all.length; i += 1) {
+        for (let j = 0; j < all.length; j += 1) {
+          expect((matrix[i]?.[j] ?? 0) + (matrix[j]?.[i] ?? 0)).toBe(0);
         }
       }
     });
 
     it('is reflexive', () => {
-      for (const version of corpus.ordered) expect(comparator.compare(version, version)).toBe(0);
+      for (let i = 0; i < all.length; i += 1) expect(matrix[i]?.[i]).toBe(0);
     });
 
     it('is transitive', () => {
-      const all = [...corpus.ordered, ...corpus.equal.flat()];
-      for (const a of all) {
-        for (const b of all) {
-          if (comparator.compare(a, b) > 0) continue;
-          for (const c of all) {
-            if (comparator.compare(b, c) > 0) continue;
-            expect(comparator.compare(a, c)).toBeLessThanOrEqual(0);
+      for (let i = 0; i < all.length; i += 1) {
+        for (let j = 0; j < all.length; j += 1) {
+          if ((matrix[i]?.[j] ?? 0) > 0) continue;
+          for (let k = 0; k < all.length; k += 1) {
+            if ((matrix[j]?.[k] ?? 0) > 0) continue;
+            expect(matrix[i]?.[k]).toBeLessThanOrEqual(0);
           }
         }
       }
