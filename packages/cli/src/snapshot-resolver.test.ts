@@ -64,22 +64,20 @@ describe('resolveSnapshot by digest', () => {
 
   it('says where it looked when nothing matches', () => {
     const cache = scratch('missing');
+    // A literal, not a pattern: a Windows cache path is full of backslashes,
+    // and every one of them is a regex escape.
     expect(() => resolveSnapshot(`sha256:${'0'.repeat(64)}`, cache)).toThrow(
-      new RegExp(`no snapshot with feed digest sha256:0{64} in ${cache}`),
+      `no snapshot with feed digest sha256:${'0'.repeat(64)} in ${cache}`,
     );
   });
 
   it('falls back to the default cache when none is given', () => {
-    expect(() => resolveSnapshot(`sha256:${'1'.repeat(64)}`)).toThrow(
-      new RegExp(DEFAULT_CACHE_DIR.replaceAll('/', '.')),
-    );
+    expect(() => resolveSnapshot(`sha256:${'1'.repeat(64)}`)).toThrow(DEFAULT_CACHE_DIR);
     expect(DEFAULT_CACHE_DIR).toMatch(/dumpscan/);
   });
 
   it('treats an empty cache path as the default', () => {
-    expect(() => resolveSnapshot(`sha256:${'2'.repeat(64)}`, '')).toThrow(
-      new RegExp(DEFAULT_CACHE_DIR.replaceAll('/', '.')),
-    );
+    expect(() => resolveSnapshot(`sha256:${'2'.repeat(64)}`, '')).toThrow(DEFAULT_CACHE_DIR);
   });
 });
 

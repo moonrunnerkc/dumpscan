@@ -139,9 +139,7 @@ describe('parseStatement', () => {
 
   it('refuses anything the schema rejects, naming the schema', () => {
     expect(() => parseStatement({ _type: 'nope' }, 'bundle.json')).toThrow(
-      new RegExp(
-        `bundle.json: the statement does not match ${SCHEMA_ID.replaceAll(/[./]/gu, '.')}`,
-      ),
+      `bundle.json: the statement does not match ${SCHEMA_ID}`,
     );
     expect(() => parseStatement([], 'bundle.json')).toThrow(/expected object, found array/);
   });
