@@ -2,7 +2,7 @@
 // matrix compare: the snapshot manifest, and the findings of every fixture
 // bundle scanned against it. Every artifact is canonical bytes produced the same
 // way a user's scan would produce them.
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import {
   mkdirSync,
   mkdtempSync,
@@ -15,6 +15,10 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
+// A dynamic import needs a URL, not a path: on Windows an absolute path starts
+// with a drive letter and the ESM loader reads D: as a URL scheme.
+const dist = (pkg) => pathToFileURL(join(root, `packages/${pkg}/dist/index.js`)).href;
+
 const outDir = process.argv[2];
 if (outDir === undefined) {
   console.error(
@@ -23,17 +27,11 @@ if (outDir === undefined) {
   process.exit(2);
 }
 
-const {
-  buildSnapshot,
-  openSnapshot,
-  manifestToJson: snapshotToJson,
-} = await import(join(root, 'packages/osv/dist/index.js'));
-const { parseLockfile, parserFor, inputDigest, manifestToJson } = await import(
-  join(root, 'packages/lockfiles/dist/index.js')
-);
-const { matchManifest, findingToJson } = await import(join(root, 'packages/match/dist/index.js'));
-const { canonicalBytes } = await import(join(root, 'packages/canon/dist/index.js'));
-const { rulesetDigest } = await import(join(root, 'packages/versions/dist/index.js'));
+const { buildSnapshot, openSnapshot, manifestToJson: snapshotToJson } = await import(dist('osv'));
+const { parseLockfile, parserFor, inputDigest, manifestToJson } = await import(dist('lockfiles'));
+const { matchManifest, findingToJson } = await import(dist('match'));
+const { canonicalBytes } = await import(dist('canon'));
+const { rulesetDigest } = await import(dist('versions'));
 
 const snapshotDir = mkdtempSync(join(tmpdir(), 'dumpscan-corpus-'));
 const built = buildSnapshot(join(root, 'fixtures/osv/synthetic/records'), snapshotDir);

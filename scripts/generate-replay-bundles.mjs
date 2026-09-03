@@ -1,21 +1,23 @@
 // Writes fixtures/bundles/<case>/expected.json: the findings, the findings root,
 // and the four digests a predicate would pin. Run with --check to fail when a
 // bundle has drifted, which is what the replay test asserts on every run.
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { mkdtempSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
+// A dynamic import needs a URL, not a path: on Windows an absolute path starts
+// with a drive letter and the ESM loader reads D: as a URL scheme.
+const dist = (pkg) => pathToFileURL(join(root, `packages/${pkg}/dist/index.js`)).href;
+
 const bundles = join(root, 'fixtures/bundles');
 const snapshotRecords = join(root, 'fixtures/osv/synthetic/records');
 
-const { buildSnapshot, openSnapshot } = await import(join(root, 'packages/osv/dist/index.js'));
-const { parseLockfile, parserFor, inputDigest, manifestToJson } = await import(
-  join(root, 'packages/lockfiles/dist/index.js')
-);
-const { matchManifest, findingToJson } = await import(join(root, 'packages/match/dist/index.js'));
-const { rulesetDigest } = await import(join(root, 'packages/versions/dist/index.js'));
+const { buildSnapshot, openSnapshot } = await import(dist('osv'));
+const { parseLockfile, parserFor, inputDigest, manifestToJson } = await import(dist('lockfiles'));
+const { matchManifest, findingToJson } = await import(dist('match'));
+const { rulesetDigest } = await import(dist('versions'));
 
 const snapshotDir = mkdtempSync(join(tmpdir(), 'dumpscan-replay-'));
 const built = buildSnapshot(snapshotRecords, snapshotDir);

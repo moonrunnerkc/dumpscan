@@ -1,14 +1,16 @@
 // Writes schema/scan-v1.schema.json from the constant in packages/predicate so
 // the published schema and the one the code validates against cannot diverge.
 // Run with --check to fail when they have.
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
-const { SCAN_STATEMENT_SCHEMA, SNAPSHOT_STATEMENT_SCHEMA } = await import(
-  join(root, 'packages/predicate/dist/index.js')
-);
+// A dynamic import needs a URL, not a path: on Windows an absolute path starts
+// with a drive letter and the ESM loader reads D: as a URL scheme.
+const dist = (pkg) => pathToFileURL(join(root, `packages/${pkg}/dist/index.js`)).href;
+
+const { SCAN_STATEMENT_SCHEMA, SNAPSHOT_STATEMENT_SCHEMA } = await import(dist('predicate'));
 
 const schemas = [
   ['schema/scan-v1.schema.json', SCAN_STATEMENT_SCHEMA],

@@ -1,16 +1,18 @@
 // Writes fixtures/lockfiles/<case>/expected.json from the current parsers.
 // Run with --check to fail when a golden has drifted, which is what the golden
 // test in packages/lockfiles asserts on every run.
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
+// A dynamic import needs a URL, not a path: on Windows an absolute path starts
+// with a drive letter and the ESM loader reads D: as a URL scheme.
+const dist = (pkg) => pathToFileURL(join(root, `packages/${pkg}/dist/index.js`)).href;
+
 const cases = join(root, 'fixtures/lockfiles');
 
-const { parseLockfile, parserFor, manifestToJson, inputDigest } = await import(
-  join(root, 'packages/lockfiles/dist/index.js')
-);
+const { parseLockfile, parserFor, manifestToJson, inputDigest } = await import(dist('lockfiles'));
 
 // A fixture directory holds one lockfile plus any sidecars a parser reads, such
 // as the go.mod beside a go.sum. The parser registry decides which is which.
