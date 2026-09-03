@@ -21,6 +21,7 @@
     "provenance": true
   },
   "dependencies": {
-    "@dumpscan/canon": "workspace:*"
+    "@dumpscan/canon": "workspace:*",
+    "@dumpscan/osv": "workspace:*"
   }
 }

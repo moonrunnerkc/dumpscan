@@ -3,3 +3,6 @@ coverage/
 reports/
 fixtures/
 pnpm-lock.yaml
+
+# Generated from fixtures/versions by scripts/generate-corpus-module.mjs
+packages/versions/src/corpus/
