@@ -75,3 +75,24 @@ The guide offers "a directory (or a single zstd archive)". The directory is the
 snapshot; the archive is only how one travels. zstd was not used because gzip is
 in Node's standard library and the archive's determinism comes from the tar
 headers rather than the compressor. ADR 0012.
+
+## First run on real CI
+
+The cross-OS matrix had never executed before 2026-09-03, because the
+repository did not exist. Every phase gate above was run locally on Linux. The
+first real run found three bugs, all one confusion between a filesystem path
+and a URL, each hidden behind the one before it:
+
+| Symptom                                                              | Cause                                                               | Fix                            |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------ |
+| `lint` threw `ENOENT` on `D:\D:\a\dumpscan\scripts\layers.json`      | `new URL('..', import.meta.url).pathname` is `/D:/a/...` on Windows | `fileURLToPath`, 29 call sites |
+| three resolver tests failed on a correct error message               | a `RegExp` built from a cache path, where `\U` and `\r` are escapes | assert the literal string      |
+| `test:determinism`, the drift checks, and the corpus emit all failed | `import(join(root, ...))`, where ESM reads `D:` as a URL scheme     | `pathToFileURL`, 11 call sites |
+
+`check-conventions.mjs` now rejects all three forms. Each guard was verified by
+reintroducing the bad code and watching the check fail.
+
+`byte identity across runners` passed for the first time on b3340d3. It is
+gated on all three suite legs, so it had never once run. The determinism
+guarantee is now demonstrated across Linux, macOS, and Windows rather than
+asserted.

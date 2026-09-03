@@ -39,6 +39,23 @@ jobs:
       - name: check the workspace is publishable at this tag
         run: node scripts/check-release.mjs "${GITHUB_REF_NAME}"
 
+      # npm answers an authorization failure on a scoped package with a 404, not
+      # a 403, so a failed publish cannot tell you whether the token was wrong,
+      # the scope was missing, or the permission was. Say who we are first.
+      - name: check the registry credential
+        run: |
+          set -euo pipefail
+          if [[ -z "${NODE_AUTH_TOKEN:-}" ]]; then
+            echo "NPM_TOKEN is not set; skipping the publish below." >&2
+            exit 0
+          fi
+          echo "authenticated as: $(npm whoami)"
+          echo "npm version: $(npm --version)"
+          echo "reachable packages in the @dumpscan scope:"
+          npm access list packages @dumpscan || echo "  (none, or the scope is not readable by this token)"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       # Published in dependency order so a consumer never resolves a version of
       # dumpscan whose @dumpscan/* dependencies are not on the registry yet.
       - name: publish
