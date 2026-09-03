@@ -1,0 +1,9 @@
+[INFO] --- maven-dependency-plugin:3.6.1:list (default-cli) @ sample-app ---
+[INFO]
+[INFO] The following files have been resolved:
+[INFO]    org.example.sample:sample-core:jar:2.16.0:compile
+[INFO]    org.example.sample:sample-api:jar:2.16.0:compile -- module org.example.sample.api
+[INFO]    org.example.other:helper:jar:sources:1.4.7:test
+[INFO]    org.example.other:plain:jar:3.0.0-M1:runtime
+[INFO]
+[INFO] ------------------------------------------------------------------------

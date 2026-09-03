@@ -1,5 +1,6 @@
 {
   "lockfile": "uv.lock",
+  "sidecars": [],
   "format": "uv.lock v1",
   "manifests": [
     {

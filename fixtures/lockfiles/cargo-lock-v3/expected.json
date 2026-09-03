@@ -1,0 +1,26 @@
+{
+  "lockfile": "Cargo.lock",
+  "sidecars": [],
+  "format": "Cargo.lock v3",
+  "manifests": [
+    {
+      "inputDigest": "sha256:3cc3e26d2e4db781423af98776c4dbd11f0a7f0e0b5b83a374ceebfed2631c69",
+      "manifest": {
+        "manifestVersion": "dumpscan.input/v1",
+        "format": "Cargo.lock v3",
+        "lockfileDigest": "sha256:b9a52e3dd2cb36a746711c7562a5e3df628b616f3216f16db4803266bf018e0e",
+        "workspaceRoot": ".",
+        "overApproximated": false,
+        "packages": [
+          {
+            "ecosystem": "crates.io",
+            "name": "sample_crate",
+            "version": "0.3.36",
+            "purl": "pkg:cargo/sample_crate@0.3.36"
+          }
+        ],
+        "unresolved": []
+      }
+    }
+  ]
+}

@@ -1,4 +1,8 @@
+export { cargoLockParser } from './cargo-lock.js';
 export { closureFrom } from './closure.js';
+export { goSumParser, mainModulePath, unescapeModulePath } from './go-sum.js';
+export { gradleLockfileParser } from './gradle-lockfile.js';
+export { mavenListParser } from './maven-list.js';
 export type { DependencyNode } from './closure.js';
 export {
   buildManifest,

@@ -1,5 +1,6 @@
 {
   "lockfile": "Pipfile.lock",
+  "sidecars": [],
   "format": "Pipfile.lock spec 6",
   "manifests": [
     {

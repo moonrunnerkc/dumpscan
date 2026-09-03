@@ -7,30 +7,38 @@ import { join } from 'node:path';
 const root = new URL('..', import.meta.url).pathname;
 const cases = join(root, 'fixtures/lockfiles');
 
-const { parseLockfile, manifestToJson, inputDigest } = await import(
+const { parseLockfile, parserFor, manifestToJson, inputDigest } = await import(
   join(root, 'packages/lockfiles/dist/index.js')
 );
 
-function lockfileIn(dir) {
-  for (const entry of readdirSync(dir).sort()) {
-    if (entry === 'expected.json') continue;
-    if (statSync(join(dir, entry)).isFile()) return entry;
-  }
-  return undefined;
+// A fixture directory holds one lockfile plus any sidecars a parser reads, such
+// as the go.mod beside a go.sum. The parser registry decides which is which.
+function splitDirectory(dir) {
+  const files = readdirSync(dir)
+    .sort()
+    .filter((entry) => entry !== 'expected.json' && statSync(join(dir, entry)).isFile());
+  const lockfile = files.find((entry) => parserFor(entry) !== undefined);
+  const sidecars = Object.fromEntries(
+    files
+      .filter((entry) => entry !== lockfile)
+      .map((entry) => [entry, readFileSync(join(dir, entry), 'utf8')]),
+  );
+  return { lockfile, sidecars };
 }
 
 function render(name) {
   const dir = join(cases, name);
-  const filename = lockfileIn(dir);
+  const { lockfile: filename, sidecars } = splitDirectory(dir);
   if (filename === undefined) return undefined;
   const bytes = readFileSync(join(dir, filename));
 
   try {
-    const parsed = parseLockfile(filename, bytes);
+    const parsed = parseLockfile(filename, bytes, sidecars);
     return (
       JSON.stringify(
         {
           lockfile: filename,
+          sidecars: Object.keys(sidecars),
           format: parsed.format,
           manifests: parsed.manifests.map((manifest) => ({
             inputDigest: inputDigest(manifest),

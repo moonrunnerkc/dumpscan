@@ -1,5 +1,6 @@
 {
   "lockfile": "package-lock.json",
+  "sidecars": [],
   "format": "package-lock.json v3",
   "manifests": [
     {

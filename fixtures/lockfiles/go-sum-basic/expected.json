@@ -1,0 +1,52 @@
+{
+  "lockfile": "go.sum",
+  "sidecars": [
+    "go.mod"
+  ],
+  "format": "go.sum with go.mod",
+  "manifests": [
+    {
+      "inputDigest": "sha256:0d935a79490b5a22b6fbb63f10282628e74bee9e7324711416b1e67de654b561",
+      "manifest": {
+        "manifestVersion": "dumpscan.input/v1",
+        "format": "go.sum with go.mod",
+        "lockfileDigest": "sha256:99e30544df06519576370d7810403fcb4a9bdb8f7d588458b1a5f8a098627227",
+        "workspaceRoot": ".",
+        "overApproximated": true,
+        "packages": [
+          {
+            "ecosystem": "Go",
+            "name": "example.invalid/legacy",
+            "version": "v2.0.0+incompatible",
+            "purl": "pkg:golang/example.invalid/legacy@v2.0.0%2Bincompatible"
+          },
+          {
+            "ecosystem": "Go",
+            "name": "example.invalid/pseudo",
+            "version": "v0.0.0-20191109021931-daa7c04131f5",
+            "purl": "pkg:golang/example.invalid/pseudo@v0.0.0-20191109021931-daa7c04131f5"
+          },
+          {
+            "ecosystem": "Go",
+            "name": "example.invalid/x/Net",
+            "version": "v0.22.0",
+            "purl": "pkg:golang/example.invalid/x/net@v0.22.0"
+          },
+          {
+            "ecosystem": "Go",
+            "name": "example.invalid/x/net",
+            "version": "v0.23.0",
+            "purl": "pkg:golang/example.invalid/x/net@v0.23.0"
+          },
+          {
+            "ecosystem": "Go",
+            "name": "example.invalid/x/text",
+            "version": "v0.14.0",
+            "purl": "pkg:golang/example.invalid/x/text@v0.14.0"
+          }
+        ],
+        "unresolved": []
+      }
+    }
+  ]
+}

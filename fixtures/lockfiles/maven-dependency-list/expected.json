@@ -1,0 +1,44 @@
+{
+  "lockfile": "dependency-list.txt",
+  "sidecars": [],
+  "format": "mvn dependency:list",
+  "manifests": [
+    {
+      "inputDigest": "sha256:4f704c7a94255fc07189d7c85f120080efaaf9ddf0c6fc3b6a4d16a1d5381d96",
+      "manifest": {
+        "manifestVersion": "dumpscan.input/v1",
+        "format": "mvn dependency:list",
+        "lockfileDigest": "sha256:231dc9240f1a660362790d78e53b1c23d7bba5e53c251769dfe80ff2fd81e1a9",
+        "workspaceRoot": ".",
+        "overApproximated": false,
+        "packages": [
+          {
+            "ecosystem": "Maven",
+            "name": "org.example.other:helper",
+            "version": "1.4.7",
+            "purl": "pkg:maven/org.example.other/helper@1.4.7"
+          },
+          {
+            "ecosystem": "Maven",
+            "name": "org.example.other:plain",
+            "version": "3.0.0-M1",
+            "purl": "pkg:maven/org.example.other/plain@3.0.0-M1"
+          },
+          {
+            "ecosystem": "Maven",
+            "name": "org.example.sample:sample-api",
+            "version": "2.16.0",
+            "purl": "pkg:maven/org.example.sample/sample-api@2.16.0"
+          },
+          {
+            "ecosystem": "Maven",
+            "name": "org.example.sample:sample-core",
+            "version": "2.16.0",
+            "purl": "pkg:maven/org.example.sample/sample-core@2.16.0"
+          }
+        ],
+        "unresolved": []
+      }
+    }
+  ]
+}

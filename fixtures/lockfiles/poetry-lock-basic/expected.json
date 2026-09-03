@@ -1,5 +1,6 @@
 {
   "lockfile": "poetry.lock",
+  "sidecars": [],
   "format": "poetry.lock v2.0",
   "manifests": [
     {

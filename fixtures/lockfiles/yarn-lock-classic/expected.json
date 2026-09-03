@@ -1,5 +1,6 @@
 {
   "lockfile": "yarn.lock",
+  "sidecars": [],
   "format": "yarn.lock classic v1",
   "manifests": [
     {

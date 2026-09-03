@@ -27,7 +27,7 @@ const {
   openSnapshot,
   manifestToJson: snapshotToJson,
 } = await import(join(root, 'packages/osv/dist/index.js'));
-const { parseLockfile, inputDigest, manifestToJson } = await import(
+const { parseLockfile, parserFor, inputDigest, manifestToJson } = await import(
   join(root, 'packages/lockfiles/dist/index.js')
 );
 const { matchManifest, findingToJson } = await import(join(root, 'packages/match/dist/index.js'));
@@ -54,12 +54,18 @@ write('comparator-ruleset.json', { comparatorRulesetDigest: rulesetDigest() });
 const bundles = join(root, 'fixtures/bundles');
 for (const bundle of readdirSync(bundles).sort()) {
   const dir = join(bundles, bundle);
-  const lockfiles = readdirSync(dir)
+  const files = readdirSync(dir)
     .sort()
     .filter((entry) => entry !== 'expected.json' && statSync(join(dir, entry)).isFile());
+  const lockfiles = files.filter((entry) => parserFor(entry) !== undefined);
+  const sidecars = Object.fromEntries(
+    files
+      .filter((entry) => !lockfiles.includes(entry))
+      .map((entry) => [entry, readFileSync(join(dir, entry), 'utf8')]),
+  );
 
   for (const filename of lockfiles) {
-    const parsed = parseLockfile(filename, readFileSync(join(dir, filename)));
+    const parsed = parseLockfile(filename, readFileSync(join(dir, filename)), sidecars);
     for (const manifest of parsed.manifests) {
       const result = matchManifest(manifest, snapshot);
       const slug = `${filename}--${manifest.workspaceRoot}`.replaceAll(/[^A-Za-z0-9._-]/g, '_');

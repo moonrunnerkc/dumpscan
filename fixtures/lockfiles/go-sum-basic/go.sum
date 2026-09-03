@@ -1,0 +1,10 @@
+example.invalid/x/!net v0.22.0 h1:aaa=
+example.invalid/x/!net v0.22.0/go.mod h1:bbb=
+example.invalid/x/net v0.23.0 h1:ccc=
+example.invalid/x/net v0.23.0/go.mod h1:ddd=
+example.invalid/x/text v0.14.0 h1:eee=
+example.invalid/x/text v0.14.0/go.mod h1:fff=
+example.invalid/legacy v2.0.0+incompatible h1:ggg=
+example.invalid/legacy v2.0.0+incompatible/go.mod h1:hhh=
+example.invalid/pseudo v0.0.0-20191109021931-daa7c04131f5 h1:iii=
+example.invalid/app v1.0.0 h1:jjj=

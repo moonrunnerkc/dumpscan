@@ -1,5 +1,6 @@
 {
   "lockfile": "pnpm-lock.yaml",
+  "sidecars": [],
   "format": "pnpm-lock.yaml v6.0",
   "manifests": [
     {

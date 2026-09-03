@@ -12,6 +12,12 @@ export interface ParseInput {
   readonly text: string;
   /** SHA-256 of the raw bytes. */
   readonly lockfileDigest: Digest;
+  /**
+   * Adjacent files a parser may consult, keyed by basename. `go.sum` reads the
+   * `go.mod` beside it to learn the main module path. Sidecars are never hashed
+   * into the lockfile digest: only the file being parsed is.
+   */
+  readonly sidecars?: Readonly<Record<string, string>>;
 }
 
 export interface ParsedLockfile {
@@ -40,14 +46,20 @@ const decoder = new TextDecoder('utf-8', { fatal: false });
  *
  * @param filename - Path or basename of the lockfile.
  * @param bytes - The file contents.
+ * @param sidecars - Adjacent files, keyed by basename, that the parser may read.
  * @returns The parse input, with the raw digest already computed.
  */
-export function parseInput(filename: string, bytes: Uint8Array): ParseInput {
+export function parseInput(
+  filename: string,
+  bytes: Uint8Array,
+  sidecars?: Readonly<Record<string, string>>,
+): ParseInput {
   return {
     filename: basename(filename),
     bytes,
     text: stripBom(decoder.decode(bytes)),
     lockfileDigest: digest(bytes),
+    ...(sidecars === undefined ? {} : { sidecars }),
   };
 }
 

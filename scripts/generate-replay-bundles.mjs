@@ -10,7 +10,7 @@ const bundles = join(root, 'fixtures/bundles');
 const snapshotRecords = join(root, 'fixtures/osv/synthetic/records');
 
 const { buildSnapshot, openSnapshot } = await import(join(root, 'packages/osv/dist/index.js'));
-const { parseLockfile, inputDigest, manifestToJson } = await import(
+const { parseLockfile, parserFor, inputDigest, manifestToJson } = await import(
   join(root, 'packages/lockfiles/dist/index.js')
 );
 const { matchManifest, findingToJson } = await import(join(root, 'packages/match/dist/index.js'));
@@ -20,18 +20,28 @@ const snapshotDir = mkdtempSync(join(tmpdir(), 'dumpscan-replay-'));
 const built = buildSnapshot(snapshotRecords, snapshotDir);
 const snapshot = openSnapshot(snapshotDir);
 
-function lockfilesIn(dir) {
-  return readdirSync(dir)
+// Files a parser claims are lockfiles; everything else beside them is a sidecar,
+// such as the go.mod a go.sum reads to learn the main module path.
+function splitDirectory(dir) {
+  const files = readdirSync(dir)
     .sort()
     .filter((entry) => entry !== 'expected.json' && statSync(join(dir, entry)).isFile());
+  const lockfiles = files.filter((entry) => parserFor(entry) !== undefined);
+  const sidecars = Object.fromEntries(
+    files
+      .filter((entry) => !lockfiles.includes(entry))
+      .map((entry) => [entry, readFileSync(join(dir, entry), 'utf8')]),
+  );
+  return { lockfiles, sidecars };
 }
 
 function render(name) {
   const dir = join(bundles, name);
   const scans = [];
+  const { lockfiles, sidecars } = splitDirectory(dir);
 
-  for (const filename of lockfilesIn(dir)) {
-    const parsed = parseLockfile(filename, readFileSync(join(dir, filename)));
+  for (const filename of lockfiles) {
+    const parsed = parseLockfile(filename, readFileSync(join(dir, filename)), sidecars);
     for (const manifest of parsed.manifests) {
       const result = matchManifest(manifest, snapshot);
       scans.push({

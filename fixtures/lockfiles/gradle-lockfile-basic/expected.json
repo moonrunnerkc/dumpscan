@@ -1,0 +1,32 @@
+{
+  "lockfile": "gradle.lockfile",
+  "sidecars": [],
+  "format": "gradle.lockfile",
+  "manifests": [
+    {
+      "inputDigest": "sha256:947e76c13cb62097b6907208f65f4a34d5d97b7fad93f60e5f7c4b4b1d67f278",
+      "manifest": {
+        "manifestVersion": "dumpscan.input/v1",
+        "format": "gradle.lockfile",
+        "lockfileDigest": "sha256:ae6da60775f4ad57345afb1545635a6f625992105ea31f28f876011b3506931b",
+        "workspaceRoot": ".",
+        "overApproximated": false,
+        "packages": [
+          {
+            "ecosystem": "Maven",
+            "name": "org.example.other:helper",
+            "version": "1.4.7",
+            "purl": "pkg:maven/org.example.other/helper@1.4.7"
+          },
+          {
+            "ecosystem": "Maven",
+            "name": "org.example.sample:sample-core",
+            "version": "2.16.0",
+            "purl": "pkg:maven/org.example.sample/sample-core@2.16.0"
+          }
+        ],
+        "unresolved": []
+      }
+    }
+  ]
+}

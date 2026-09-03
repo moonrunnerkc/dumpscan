@@ -1,5 +1,6 @@
 {
   "lockfile": "requirements.txt",
+  "sidecars": [],
   "format": "requirements.txt pinned",
   "manifests": [
     {

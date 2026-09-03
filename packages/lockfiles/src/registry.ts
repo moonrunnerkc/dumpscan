@@ -1,5 +1,9 @@
 import { compareCodeUnits } from '@dumpscan/canon';
 
+import { cargoLockParser } from './cargo-lock.js';
+import { goSumParser } from './go-sum.js';
+import { gradleLockfileParser } from './gradle-lockfile.js';
+import { mavenListParser } from './maven-list.js';
 import { packageLockParser } from './npm-package-lock.js';
 import { pnpmLockParser } from './npm-pnpm-lock.js';
 import { yarnLockParser } from './npm-yarn-lock.js';
@@ -19,6 +23,10 @@ export const PARSERS: readonly LockfileParser[] = [
   poetryLockParser,
   pipfileLockParser,
   requirementsParser,
+  cargoLockParser,
+  goSumParser,
+  mavenListParser,
+  gradleLockfileParser,
 ];
 
 const BY_FILENAME = new Map<string, LockfileParser>(
@@ -44,11 +52,17 @@ export function parserFor(path: string): LockfileParser | undefined {
  *
  * @param path - Path of the lockfile, used to select the parser and in messages.
  * @param bytes - The file contents.
+ * @param sidecars - Adjacent files the parser may read, such as the `go.mod`
+ * beside a `go.sum`.
  * @returns The detected format and its manifests.
  * @throws Error when no parser claims the filename, or when the parser refuses
  * the contents.
  */
-export function parseLockfile(path: string, bytes: Uint8Array): ParsedLockfile {
+export function parseLockfile(
+  path: string,
+  bytes: Uint8Array,
+  sidecars?: Readonly<Record<string, string>>,
+): ParsedLockfile {
   const parser = parserFor(path);
   if (parser === undefined) {
     const known = [...BY_FILENAME.keys()].sort(compareCodeUnits).join(', ');
@@ -56,7 +70,7 @@ export function parseLockfile(path: string, bytes: Uint8Array): ParsedLockfile {
       `parseLockfile: no parser reads ${JSON.stringify(basename(path))}; dumpscan reads ${known}`,
     );
   }
-  return parser.parse(parseInput(path, bytes));
+  return parser.parse(parseInput(path, bytes, sidecars));
 }
 
 /**

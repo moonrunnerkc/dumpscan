@@ -1,0 +1,6 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+org.example.other:helper:1.4.7=compileClasspath,runtimeClasspath
+org.example.sample:sample-core:2.16.0=compileClasspath
+empty=annotationProcessor,testAnnotationProcessor
