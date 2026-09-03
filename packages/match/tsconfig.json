@@ -12,6 +12,9 @@
       "path": "../canon"
     },
     {
+      "path": "../lockfiles"
+    },
+    {
       "path": "../merkle"
     },
     {
@@ -19,9 +22,6 @@
     },
     {
       "path": "../versions"
-    },
-    {
-      "path": "../lockfiles"
     }
   ]
 }

@@ -1,0 +1,292 @@
+{
+  "note": "Committed scan of the lockfiles beside this file against fixtures/osv/synthetic. A change to findingsRoot means matching semantics moved.",
+  "feedDigest": "sha256:77f3f14075127e4778d6ffb34cb7626604bb78784cc489c56b6a4e404010dd5b",
+  "snapshotManifestDigest": "sha256:bcef971432eedfbd5e6112b7848949cb1dc2b73f475454af6129825c8e5221b6",
+  "comparatorRulesetDigest": "sha256:c77f74b991ff39f3ccac9487af68aeed6690534944f265ba60438daff1a7fcab",
+  "exclusionsDigest": null,
+  "scans": [
+    {
+      "lockfile": "package-lock.json",
+      "workspaceRoot": ".",
+      "inputDigest": "sha256:725b0669df04cc8794f098f0a163dfe8554f9188e3b2e4073bd6b5c348fb6b69",
+      "matcherVersion": "0.1.0",
+      "findingsRoot": "sha256:fe78864f47561ca3a8c4cd83d6a24b1991a86100d9c3a42d5e17032dfc87d924",
+      "findingsCount": 5,
+      "ecosystems": [
+        "npm"
+      ],
+      "manifest": {
+        "manifestVersion": "dumpscan.input/v1",
+        "format": "package-lock.json v3",
+        "lockfileDigest": "sha256:781f06546b4864684c6e4c037fc8c53fa140dc9dc9ce3e0dcb0475fc157220d5",
+        "workspaceRoot": ".",
+        "overApproximated": false,
+        "packages": [
+          {
+            "ecosystem": "npm",
+            "name": "@Sample/Widget",
+            "version": "1.4.7",
+            "purl": "pkg:npm/%40sample/widget@1.4.7"
+          },
+          {
+            "ecosystem": "npm",
+            "name": "cheeseparser",
+            "version": "4.17.20",
+            "purl": "pkg:npm/cheeseparser@4.17.20"
+          },
+          {
+            "ecosystem": "npm",
+            "name": "gitonly",
+            "version": "0.5.0",
+            "purl": "pkg:npm/gitonly@0.5.0"
+          },
+          {
+            "ecosystem": "npm",
+            "name": "polyglot",
+            "version": "1.9.0",
+            "purl": "pkg:npm/polyglot@1.9.0"
+          },
+          {
+            "ecosystem": "npm",
+            "name": "tiny-helper",
+            "version": "0.4.2",
+            "purl": "pkg:npm/tiny-helper@0.4.2"
+          },
+          {
+            "ecosystem": "npm",
+            "name": "unaffected",
+            "version": "9.9.9",
+            "purl": "pkg:npm/unaffected@9.9.9"
+          }
+        ],
+        "unresolved": []
+      },
+      "findings": [
+        {
+          "ecosystem": "npm",
+          "name": "@Sample/Widget",
+          "version": "1.4.7",
+          "purl": "pkg:npm/%40sample/widget@1.4.7",
+          "advisoryId": "DUMPSCAN-NPM-0002",
+          "advisoryModified": "2025-03-01T00:00:00Z",
+          "advisoryDigest": "sha256:2d9f0a8049605ebb260bef56fe1216704eaab9825112c4d9a0e543425c8dd932",
+          "matchedRange": {
+            "type": "VERSIONS",
+            "introduced": "1.4.7",
+            "fixed": null,
+            "lastAffected": "1.4.7",
+            "limit": null
+          },
+          "aliases": [
+            "CVE-2025-90002"
+          ],
+          "severity": [
+            {
+              "type": "CVSS_V4",
+              "score": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N"
+            }
+          ],
+          "status": "affected",
+          "reason": null
+        },
+        {
+          "ecosystem": "npm",
+          "name": "cheeseparser",
+          "version": "4.17.20",
+          "purl": "pkg:npm/cheeseparser@4.17.20",
+          "advisoryId": "DUMPSCAN-NPM-0001",
+          "advisoryModified": "2025-01-14T09:00:00Z",
+          "advisoryDigest": "sha256:3dcd038ae543f7ba0ea501f2a7a3e7b449b3fb039a4feaccf0fd13acf0416763",
+          "matchedRange": {
+            "type": "SEMVER",
+            "introduced": "0",
+            "fixed": "4.17.21",
+            "lastAffected": null,
+            "limit": null
+          },
+          "aliases": [
+            "CVE-2024-90001",
+            "GHSA-aaaa-bbbb-cccc"
+          ],
+          "severity": [
+            {
+              "type": "CVSS_V3",
+              "score": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+            }
+          ],
+          "status": "affected",
+          "reason": null
+        },
+        {
+          "ecosystem": "npm",
+          "name": "cheeseparser",
+          "version": "4.17.20",
+          "purl": "pkg:npm/cheeseparser@4.17.20",
+          "advisoryId": "DUMPSCAN-NPM-0003",
+          "advisoryModified": "2025-02-20T10:30:00Z",
+          "advisoryDigest": "sha256:e64011b906046770332c074cec48c94a73367c5dbf253d2d8b25822c38258ff5",
+          "matchedRange": {
+            "type": "SEMVER",
+            "introduced": "0",
+            "fixed": "99.0.0",
+            "lastAffected": null,
+            "limit": null
+          },
+          "aliases": [],
+          "severity": [],
+          "status": "withdrawn-suppressed",
+          "reason": "advisory was withdrawn at 2025-02-19T08:00:00Z"
+        },
+        {
+          "ecosystem": "npm",
+          "name": "gitonly",
+          "version": "0.5.0",
+          "purl": "pkg:npm/gitonly@0.5.0",
+          "advisoryId": "DUMPSCAN-NPM-0004",
+          "advisoryModified": "2025-01-30T00:00:00Z",
+          "advisoryDigest": "sha256:008ed2a550d9b5741220bf1904f2e35330ddd75b25416b1712f1c09df7f1395a",
+          "matchedRange": null,
+          "aliases": [],
+          "severity": [],
+          "status": "unevaluated",
+          "reason": "dumpscan does not evaluate GIT ranges, so this package may or may not be affected"
+        },
+        {
+          "ecosystem": "npm",
+          "name": "polyglot",
+          "version": "1.9.0",
+          "purl": "pkg:npm/polyglot@1.9.0",
+          "advisoryId": "DUMPSCAN-MULTI-0001",
+          "advisoryModified": "2025-09-01T00:00:00Z",
+          "advisoryDigest": "sha256:3dc3f85e55bd85d55529190e01e3e84381a0917f81fe92e9bb26addcb26d574e",
+          "matchedRange": {
+            "type": "SEMVER",
+            "introduced": "0",
+            "fixed": "2.0.0",
+            "lastAffected": null,
+            "limit": null
+          },
+          "aliases": [],
+          "severity": [],
+          "status": "affected",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "lockfile": "requirements.txt",
+      "workspaceRoot": ".",
+      "inputDigest": "sha256:5ab7a55e49ed377d182dfd1706b13f4f5a963d2cb4a4d668fe2126bf950ef849",
+      "matcherVersion": "0.1.0",
+      "findingsRoot": "sha256:c92de6e4671078cc7ad1b90d61c58977093b7edb042a7db374bf448b6f681836",
+      "findingsCount": 3,
+      "ecosystems": [
+        "PyPI"
+      ],
+      "manifest": {
+        "manifestVersion": "dumpscan.input/v1",
+        "format": "requirements.txt pinned",
+        "lockfileDigest": "sha256:9b0ae94f9f4325b96ff8170333c5e52447edddeab67841da68145f687b0625d9",
+        "workspaceRoot": ".",
+        "overApproximated": false,
+        "packages": [
+          {
+            "ecosystem": "PyPI",
+            "name": "Sample_Client",
+            "version": "2.30.0",
+            "purl": "pkg:pypi/sample-client@2.30.0"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "polyglot",
+            "version": "1.9.0",
+            "purl": "pkg:pypi/polyglot@1.9.0"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "sample.client",
+            "version": "1.1.0rc1",
+            "purl": "pkg:pypi/sample-client@1.1.0rc1"
+          },
+          {
+            "ecosystem": "PyPI",
+            "name": "tiny-helper",
+            "version": "0.4.2",
+            "purl": "pkg:pypi/tiny-helper@0.4.2"
+          }
+        ],
+        "unresolved": []
+      },
+      "findings": [
+        {
+          "ecosystem": "PyPI",
+          "name": "Sample_Client",
+          "version": "2.30.0",
+          "purl": "pkg:pypi/sample-client@2.30.0",
+          "advisoryId": "DUMPSCAN-PYPI-0001",
+          "advisoryModified": "2025-04-05T17:45:00Z",
+          "advisoryDigest": "sha256:8f04017d075af0e5df182620bacc020023faa966300bffbbb99cdaa5945af033",
+          "matchedRange": {
+            "type": "ECOSYSTEM",
+            "introduced": "2.0",
+            "fixed": "2.31.0",
+            "lastAffected": null,
+            "limit": null
+          },
+          "aliases": [
+            "CVE-2025-90003",
+            "PYSEC-2025-11"
+          ],
+          "severity": [
+            {
+              "type": "CVSS_V3",
+              "score": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+            }
+          ],
+          "status": "affected",
+          "reason": null
+        },
+        {
+          "ecosystem": "PyPI",
+          "name": "polyglot",
+          "version": "1.9.0",
+          "purl": "pkg:pypi/polyglot@1.9.0",
+          "advisoryId": "DUMPSCAN-MULTI-0001",
+          "advisoryModified": "2025-09-01T00:00:00Z",
+          "advisoryDigest": "sha256:3dc3f85e55bd85d55529190e01e3e84381a0917f81fe92e9bb26addcb26d574e",
+          "matchedRange": {
+            "type": "ECOSYSTEM",
+            "introduced": "0",
+            "fixed": "2.0.0",
+            "lastAffected": null,
+            "limit": null
+          },
+          "aliases": [],
+          "severity": [],
+          "status": "affected",
+          "reason": null
+        },
+        {
+          "ecosystem": "PyPI",
+          "name": "sample.client",
+          "version": "1.1.0rc1",
+          "purl": "pkg:pypi/sample-client@1.1.0rc1",
+          "advisoryId": "DUMPSCAN-PYPI-0002",
+          "advisoryModified": "2025-05-11T00:00:00Z",
+          "advisoryDigest": "sha256:ec7c78f594c8ec36e0f4ec8f3bd3e444bf3b537500e0a3fb7e6e1db0f7f6e349",
+          "matchedRange": {
+            "type": "VERSIONS",
+            "introduced": "1.1.0rc1",
+            "fixed": null,
+            "lastAffected": "1.1.0rc1",
+            "limit": null
+          },
+          "aliases": [],
+          "severity": [],
+          "status": "affected",
+          "reason": null
+        }
+      ]
+    }
+  ]
+}
