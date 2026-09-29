@@ -29,7 +29,7 @@ export function toHex(bytes: Uint8Array): string {
   let out = '';
   for (const byte of bytes) {
     out += HEX.charAt(byte >> 4);
-    out += HEX.charAt(byte & 0x0f);
+    out += HEX.charAt(byte & 0x07);
   }
   return out;
 }
